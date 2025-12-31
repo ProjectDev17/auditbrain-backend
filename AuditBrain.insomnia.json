@@ -1,0 +1,179 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-12-31T18:13:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_list_audits",
+      "parentId": "fld_audits",
+      "modified": 1704047580000,
+      "created": 1704047580000,
+      "url": "{{ _.base_url }}/api/audits/",
+      "name": "List Audits",
+      "description": "Obtener lista de auditorías con paginación",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047580000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_audit",
+      "parentId": "fld_audits",
+      "modified": 1704047590000,
+      "created": 1704047590000,
+      "url": "{{ _.base_url }}/api/audits/",
+      "name": "Create Audit",
+      "description": "Crear una nueva auditoría",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Auditoría de Seguridad 2024\",\n  \"description\": \"Revisión semestral de accesos y permisos.\",\n  \"status\": \"pending\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704047590000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_audit",
+      "parentId": "fld_audits",
+      "modified": 1704047600000,
+      "created": 1704047600000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
+      "name": "Get Audit Detail",
+      "description": "Obtener detalle de una auditoría específica",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_audit",
+      "parentId": "fld_audits",
+      "modified": 1704047610000,
+      "created": 1704047610000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
+      "name": "Update Audit",
+      "description": "Actualizar una auditoría existente",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisión de accesos.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704047610000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_audit",
+      "parentId": "fld_audits",
+      "modified": 1704047620000,
+      "created": 1704047620000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
+      "name": "Delete Audit (Soft)",
+      "description": "Eliminar auditoría (soft delete)",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047620000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_audits",
+      "parentId": "wrk_auditbrain",
+      "modified": 1704047570000,
+      "created": 1704047570000,
+      "name": "Audits",
+      "description": "Endpoints para gestión de auditorías",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1704047570000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_auditbrain",
+      "parentId": null,
+      "modified": 1704047560000,
+      "created": 1704047560000,
+      "name": "AuditBrain API",
+      "description": "API REST para gestión de auditorías",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_auditbrain",
+      "modified": 1704047565000,
+      "created": 1704047565000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8000",
+        "audit_id": ""
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "audit_id"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1704047565000,
+      "_type": "environment"
+    }
+  ]
+}

@@ -87,13 +87,26 @@ db.audit_logs.find().pretty()
 
 ## Documentación API
 
-Se incluye una colección de Postman (`AuditBrain.postman_collection.json`) para probar los endpoints:
+Se incluyen dos colecciones para probar los endpoints:
+
+### Postman
+
+Importar `AuditBrain.postman_collection.json` en Postman.
+
+### Insomnia
+
+Importar `AuditBrain.insomnia.json` en Insomnia.
+
+**Endpoints disponibles:**
 
 - `GET /api/audits/` - Listar auditorías
 - `POST /api/audits/` - Crear auditoría
 - `GET /api/audits/{id}/` - Obtener detalle
 - `PATCH /api/audits/{id}/` - Actualizar auditoría
 - `DELETE /api/audits/{id}/` - Eliminar (soft delete)
+
+> [!NOTE]
+> Si usas MongoDB local (no Docker), asegúrate de actualizar `MONGO_URI` en `.env` o en `settings.py`.
 
 ## Admin Panel
 

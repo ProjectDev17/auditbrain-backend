@@ -85,16 +85,20 @@ WSGI_APPLICATION = "auditbrain.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('POSTGRES_DB', 'auditbrain'),
+        "USER": os.environ.get('POSTGRES_USER', 'auditbrain_user'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD', 'auditbrain_password'),
+        "HOST": os.environ.get('POSTGRES_HOST', 'localhost'),
+        "PORT": os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
-# PostgreSQL config commented out due to Docker issues in env
+
+# SQLite config (fallback for testing without Docker)
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.environ.get('POSTGRES_DB', 'auditbrain'),
-#         ...
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
 

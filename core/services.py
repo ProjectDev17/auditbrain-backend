@@ -72,6 +72,40 @@ class MongoLogService:
             self._collection.insert_one(log_entry)
         except Exception as e:
             logger.error(f"Failed to write to MongoDB: {e}")
+    
+    def get_history(self, resource_id, limit=50):
+        """
+        Obtiene el historial de logs para un recurso específico.
+        
+        :param resource_id: ID del recurso
+        :param limit: Número máximo de logs a retornar
+        :return: Lista de logs ordenados por timestamp descendente
+        """
+        if self._collection is None:
+            try:
+                self._initialize()
+            except:
+                pass
+            
+            if self._collection is None:
+                logger.warning("MongoDB unavailable. Cannot retrieve history.")
+                return []
+        
+        try:
+            logs = list(self._collection.find(
+                {'resource_id': str(resource_id)}
+            ).sort('timestamp', -1).limit(limit))
+            
+            # Convertir ObjectId y datetime a string para serialización
+            for log in logs:
+                log['_id'] = str(log['_id'])
+                if 'timestamp' in log and hasattr(log['timestamp'], 'isoformat'):
+                    log['timestamp'] = log['timestamp'].isoformat()
+            
+            return logs
+        except Exception as e:
+            logger.error(f"Error retrieving history: {e}")
+            return []
 
 # Instancia global
 audit_logger = MongoLogService()

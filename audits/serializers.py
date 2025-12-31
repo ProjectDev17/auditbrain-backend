@@ -106,3 +106,34 @@ class EvidenceSerializer(serializers.ModelSerializer):
             )
         
         return value
+
+
+class AuditDetailSerializer(serializers.ModelSerializer):
+    """
+    Serializer extendido para detalle de auditorías.
+    Incluye eventos, evidencias e historial de cambios desde MongoDB.
+    """
+    events = AuditEventSerializer(many=True, read_only=True)
+    evidences = EvidenceSerializer(many=True, read_only=True)
+    history = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Audit
+        fields = [
+            'id', 'title', 'description', 'status',
+            'created_at', 'updated_at',
+            'created_by', 'updated_by',
+            'deleted',
+            'events', 'evidences', 'history'
+        ]
+        read_only_fields = [
+            'id', 'created_at', 'updated_at',
+            'created_by', 'updated_by',
+            'deleted', 'deleted_by',
+            'events', 'evidences', 'history'
+        ]
+    
+    def get_history(self, obj):
+        """Obtener historial de cambios desde MongoDB."""
+        from core.services import audit_logger
+        return audit_logger.get_history(resource_id=str(obj.id), limit=20)

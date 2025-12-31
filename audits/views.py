@@ -19,6 +19,12 @@ class AuditViewSet(viewsets.ModelViewSet):
     filterset_class = AuditFilter
     ordering_fields = ['created_at', 'updated_at', 'status', 'title']
     ordering = ['-created_at']  # Ordenamiento por defecto
+    
+    def get_serializer_class(self):
+        """Usar serializer de detalle para retrieve."""
+        if self.action == 'retrieve':
+            return serializers.AuditDetailSerializer
+        return serializers.AuditSerializer
 
     def perform_destroy(self, instance):
         # Soft delete

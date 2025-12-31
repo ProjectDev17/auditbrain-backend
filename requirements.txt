@@ -5,3 +5,5 @@ pymongo>=4.5
 python-dotenv>=1.0
 flake8>=6.0
 black>=23.0
+django-filter>=23.0
+drf-nested-routers>=0.93

@@ -91,11 +91,11 @@ Se incluyen dos colecciones para probar los endpoints:
 
 ### Postman
 
-Importar `AuditBrain.postman_collection.json` en Postman.
+Importar `docs/AuditBrain.postman_collection.json` en Postman.
 
 ### Insomnia
 
-Importar `AuditBrain.insomnia.json` en Insomnia.
+Importar `docs/AuditBrain.insomnia.json` en Insomnia.
 
 **Endpoints disponibles:**
 
@@ -114,4 +114,4 @@ Acceder a `http://localhost:8000/admin/` con las credenciales del superusuario p
 
 ## Decisiones Técnicas
 
-Ver `TECHNICAL_DECISIONS.md` para detalles sobre la arquitectura y decisiones de diseño.
+Ver `docs/TECHNICAL_DECISIONS.md` para detalles sobre la arquitectura y decisiones de diseño.

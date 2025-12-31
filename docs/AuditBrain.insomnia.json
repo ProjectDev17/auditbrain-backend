@@ -1,9 +1,51 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-12-31T18:13:00.000Z",
+  "__export_date": "2025-12-31T20:45:00.000Z",
   "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
+    {
+      "_id": "wrk_auditbrain",
+      "parentId": null,
+      "modified": 1704047560000,
+      "created": 1704047560000,
+      "name": "AuditBrain API - Fase 2",
+      "description": "API REST completa para gestión de auditorías con eventos y evidencias",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_auditbrain",
+      "modified": 1704047565000,
+      "created": 1704047565000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8000",
+        "audit_id": "",
+        "event_id": "",
+        "evidence_id": ""
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "audit_id", "event_id", "evidence_id"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1704047565000,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_audits",
+      "parentId": "wrk_auditbrain",
+      "modified": 1704047570000,
+      "created": 1704047570000,
+      "name": "Audits",
+      "description": "Endpoints para gestión de auditorías",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1704047570000,
+      "_type": "request_group"
+    },
     {
       "_id": "req_list_audits",
       "parentId": "fld_audits",
@@ -19,12 +61,23 @@
       "authentication": {},
       "metaSortKey": -1704047580000,
       "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_list_audits_filtered",
+      "parentId": "fld_audits",
+      "modified": 1704047585000,
+      "created": 1704047585000,
+      "url": "{{ _.base_url }}/api/audits?status=pending&ordering=-created_at",
+      "name": "List Audits (Filtered)",
+      "description": "Listar auditorías con filtros y ordenamiento",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047585000,
+      "isPrivate": false,
       "_type": "request"
     },
     {
@@ -41,21 +94,10 @@
         "text": "{\n  \"title\": \"Auditoría de Seguridad 2024\",\n  \"description\": \"Revisión semestral de accesos y permisos.\",\n  \"status\": \"pending\"\n}"
       },
       "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
       "authentication": {},
       "metaSortKey": -1704047590000,
       "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
       "_type": "request"
     },
     {
@@ -64,8 +106,8 @@
       "modified": 1704047600000,
       "created": 1704047600000,
       "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
-      "name": "Get Audit Detail",
-      "description": "Obtener detalle de una auditoría específica",
+      "name": "Get Audit Detail (Extended)",
+      "description": "Obtener detalle con eventos, evidencias e historial",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -73,12 +115,6 @@
       "authentication": {},
       "metaSortKey": -1704047600000,
       "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
       "_type": "request"
     },
     {
@@ -95,21 +131,10 @@
         "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisión de accesos.\"\n}"
       },
       "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
       "authentication": {},
       "metaSortKey": -1704047610000,
       "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
       "_type": "request"
     },
     {
@@ -127,53 +152,146 @@
       "authentication": {},
       "metaSortKey": -1704047620000,
       "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
       "_type": "request"
     },
     {
-      "_id": "fld_audits",
+      "_id": "fld_events",
       "parentId": "wrk_auditbrain",
-      "modified": 1704047570000,
-      "created": 1704047570000,
-      "name": "Audits",
-      "description": "Endpoints para gestión de auditorías",
+      "modified": 1704047630000,
+      "created": 1704047630000,
+      "name": "Events",
+      "description": "Endpoints para eventos de calendario",
       "environment": {},
       "environmentPropertyOrder": null,
-      "metaSortKey": -1704047570000,
+      "metaSortKey": -1704047630000,
       "_type": "request_group"
     },
     {
-      "_id": "wrk_auditbrain",
-      "parentId": null,
-      "modified": 1704047560000,
-      "created": 1704047560000,
-      "name": "AuditBrain API",
-      "description": "API REST para gestión de auditorías",
-      "scope": "collection",
-      "_type": "workspace"
+      "_id": "req_list_events",
+      "parentId": "fld_events",
+      "modified": 1704047640000,
+      "created": 1704047640000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/",
+      "name": "List Events",
+      "description": "Listar eventos de una auditoría",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047640000,
+      "isPrivate": false,
+      "_type": "request"
     },
     {
-      "_id": "env_base",
-      "parentId": "wrk_auditbrain",
-      "modified": 1704047565000,
-      "created": 1704047565000,
-      "name": "Base Environment",
-      "data": {
-        "base_url": "http://localhost:8000",
-        "audit_id": ""
+      "_id": "req_create_event",
+      "parentId": "fld_events",
+      "modified": 1704047650000,
+      "created": 1704047650000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/",
+      "name": "Create Event",
+      "description": "Crear evento de calendario",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Revisión Inicial\",\n  \"description\": \"Primera revisión de la auditoría\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
       },
-      "dataPropertyOrder": {
-        "&": ["base_url", "audit_id"]
-      },
-      "color": null,
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1704047650000,
       "isPrivate": false,
-      "metaSortKey": 1704047565000,
-      "_type": "environment"
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_event",
+      "parentId": "fld_events",
+      "modified": 1704047660000,
+      "created": 1704047660000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/{{ _.event_id }}/",
+      "name": "Delete Event",
+      "description": "Eliminar evento (soft delete)",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047660000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_evidences",
+      "parentId": "wrk_auditbrain",
+      "modified": 1704047670000,
+      "created": 1704047670000,
+      "name": "Evidences",
+      "description": "Endpoints para evidencias/archivos",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1704047670000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_list_evidences",
+      "parentId": "fld_evidences",
+      "modified": 1704047680000,
+      "created": 1704047680000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/",
+      "name": "List Evidences",
+      "description": "Listar evidencias de una auditoría",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047680000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_upload_evidence",
+      "parentId": "fld_evidences",
+      "modified": 1704047690000,
+      "created": 1704047690000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/",
+      "name": "Upload Evidence",
+      "description": "Subir archivo de evidencia",
+      "method": "POST",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "file",
+            "value": "",
+            "description": "Archivo a subir (PDF, JPG, PNG, DOCX, XLSX, etc.)",
+            "type": "file"
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047690000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_evidence",
+      "parentId": "fld_evidences",
+      "modified": 1704047700000,
+      "created": 1704047700000,
+      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/{{ _.evidence_id }}/",
+      "name": "Delete Evidence",
+      "description": "Eliminar evidencia (soft delete)",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1704047700000,
+      "isPrivate": false,
+      "_type": "request"
     }
   ]
 }

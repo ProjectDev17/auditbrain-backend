@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "auditbrain-collection-id",
-    "name": "AuditBrain API",
-    "description": "Colección de pruebas para la API de AuditBrain.",
+    "_postman_id": "auditbrain-collection-v2",
+    "name": "AuditBrain API - Fase 2",
+    "description": "Colección completa para la API de AuditBrain con filtros, ordenamiento, eventos y evidencias.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -19,34 +19,58 @@
               "host": ["{{base_url}}"],
               "path": ["api", "audits", ""]
             }
-          },
-          "response": []
+          }
+        },
+        {
+          "name": "List Audits (Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/?status=pending&ordering=-created_at",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""],
+              "query": [
+                { "key": "status", "value": "pending" },
+                { "key": "ordering", "value": "-created_at" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Audits (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/?page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          }
         },
         {
           "name": "Create Audit",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"title\": \"Auditoría de Seguridad 2024\",\n    \"description\": \"Revisión semestral de accesos.\",\n    \"status\": \"pending\"\n}"
+              "raw": "{\n  \"title\": \"Auditoría de Seguridad 2024\",\n  \"description\": \"Revisión semestral de accesos.\",\n  \"status\": \"pending\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/",
               "host": ["{{base_url}}"],
               "path": ["api", "audits", ""]
             }
-          },
-          "response": []
+          }
         },
         {
-          "name": "Get Audit Detail",
+          "name": "Get Audit Detail (Extended)",
           "request": {
             "method": "GET",
             "header": [],
@@ -55,31 +79,23 @@
               "host": ["{{base_url}}"],
               "path": ["api", "audits", "{{audit_id}}", ""]
             }
-          },
-          "response": []
+          }
         },
         {
           "name": "Update Audit",
           "request": {
             "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"status\": \"in_progress\",\n    \"description\": \"Iniciado el proceso de revisión.\"\n}"
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisión.\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
               "host": ["{{base_url}}"],
               "path": ["api", "audits", "{{audit_id}}", ""]
             }
-          },
-          "response": []
+          }
         },
         {
           "name": "Delete Audit (Soft)",
@@ -91,8 +107,117 @@
               "host": ["{{base_url}}"],
               "path": ["api", "audits", "{{audit_id}}", ""]
             }
-          },
-          "response": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "List Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/events/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "events", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Revisión Inicial\",\n  \"description\": \"Primera revisión de la auditoría\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/events/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "events", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Event",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/events/{{event_id}}/",
+              "host": ["{{base_url}}"],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                "events",
+                "{{event_id}}",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Evidences",
+      "item": [
+        {
+          "name": "List Evidences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "evidences", ""]
+            }
+          }
+        },
+        {
+          "name": "Upload Evidence",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "evidences", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Evidence",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/{{evidence_id}}/",
+              "host": ["{{base_url}}"],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                "evidences",
+                "{{evidence_id}}",
+                ""
+              ]
+            }
+          }
         }
       ]
     }
@@ -105,6 +230,16 @@
     },
     {
       "key": "audit_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "event_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "evidence_id",
       "value": "",
       "type": "string"
     }

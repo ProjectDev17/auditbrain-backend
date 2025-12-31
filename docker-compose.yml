@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: auditbrain_postgres
+    environment:
+      - POSTGRES_DB=auditbrain
+      - POSTGRES_USER=auditbrain_user
+      - POSTGRES_PASSWORD=auditbrain_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:6.0
+    container_name: auditbrain_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+  mongo_data:

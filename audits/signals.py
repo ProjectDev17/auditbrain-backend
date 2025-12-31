@@ -9,7 +9,13 @@ from core.middleware import get_current_user
 @receiver(post_save, sender=Audit)
 def log_audit_save(sender, instance, created, **kwargs):
     user = get_current_user()
-    action = 'CREATE' if created else 'UPDATE'
+    
+    if created:
+        action = 'CREATE'
+    elif instance.deleted:
+        action = 'DELETE'
+    else:
+        action = 'UPDATE'
     
     data = model_to_dict(instance)
     # Convert UUIDs specifically

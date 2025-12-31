@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
+from core.middleware import get_current_user
 
 class TimeStampedModel(models.Model):
     """
@@ -43,11 +44,10 @@ class AuditableModel(TimeStampedModel, SoftDeleteModel):
         abstract = True
 
     def save(self, *args, **kwargs):
-        from core.middleware import get_current_user
         user = get_current_user()
         user_repr = str(user.id) if (user and user.is_authenticated) else 'system/anonymous'
         
-        if not self.created_by and not self.pk:
+        if not self.created_by:
             self.created_by = user_repr
         
         self.updated_by = user_repr

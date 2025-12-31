@@ -11,10 +11,14 @@ class AuditModelTest(TestCase):
     @patch('audits.signals.audit_logger')
     def test_create_audit(self, mock_logger):
         """Prueba la creación de una auditoría y la llamada al logger."""
-        # Se mockea el get_current_user o se asume system/anonymous si no hay request
-        # Para simular middleware, podemos usar un contexto o mockear get_current_user
         
-        with patch('core.middleware.get_current_user', return_value=self.user):
+    @patch('audits.signals.audit_logger')
+    def test_create_audit(self, mock_logger):
+        """Prueba la creación de una auditoría y la llamada al logger."""
+        
+        # Patch en ambos lugares donde se importa get_current_user
+        with patch('core.models.get_current_user', return_value=self.user), \
+             patch('audits.signals.get_current_user', return_value=self.user):
             audit = Audit.objects.create(title="Test Audit", description="Testing")
             
             self.assertEqual(audit.title, "Test Audit")
@@ -26,14 +30,15 @@ class AuditModelTest(TestCase):
             mock_logger.log_action.assert_called()
             args, kwargs = mock_logger.log_action.call_args
             self.assertEqual(kwargs['action'], 'CREATE')
-            self.assertEqual(str(kwargs['user']), str(self.user.id))
+            self.assertEqual(kwargs['user'], self.user)
 
     @patch('audits.signals.audit_logger')
     def test_soft_delete(self, mock_logger):
         """Prueba el soft delete."""
-        with patch('core.middleware.get_current_user', return_value=self.user):
+        with patch('core.models.get_current_user', return_value=self.user), \
+             patch('audits.signals.get_current_user', return_value=self.user):
             audit = Audit.objects.create(title="To Delete")
-            audit_id = audit.id
+            mock_logger.reset_mock() # Limpiar llamada de creación
             
             # Delete
             audit.delete()
@@ -43,7 +48,6 @@ class AuditModelTest(TestCase):
             self.assertTrue(audit.deleted)
             
             # Verificar log de eliminación
-            # La primera llamada fue CREATE, la segunda debe ser DELETE
-            self.assertEqual(mock_logger.log_action.call_count, 2)
+            mock_logger.log_action.assert_called_once()
             args, kwargs = mock_logger.log_action.call_args
             self.assertEqual(kwargs['action'], 'DELETE')

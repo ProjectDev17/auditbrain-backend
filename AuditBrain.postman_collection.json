@@ -1,0 +1,112 @@
+{
+  "info": {
+    "_postman_id": "auditbrain-collection-id",
+    "name": "AuditBrain API",
+    "description": "Colección de pruebas para la API de AuditBrain.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Audits",
+      "item": [
+        {
+          "name": "List Audits",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Audit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Auditoría de Seguridad 2024\",\n    \"description\": \"Revisión semestral de accesos.\",\n    \"status\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/audits/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Audit Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Audit",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"in_progress\",\n    \"description\": \"Iniciado el proceso de revisión.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Audit (Soft)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/audits/{{audit_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", ""]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "audit_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

@@ -106,6 +106,43 @@ class MongoLogService:
         except Exception as e:
             logger.error(f"Error retrieving history: {e}")
             return []
+    
+    def log_security_event(self, action, user_email=None, ip_address=None, user_agent=None, success=True, details=None):
+        """
+        Registra eventos de seguridad en MongoDB.
+        
+        :param action: Tipo de acción (LOGIN_SUCCESS, LOGIN_FAILED, etc.)
+        :param user_email: Email del usuario
+        :param ip_address: Dirección IP
+        :param user_agent: User agent del navegador
+        :param success: Si la acción fue exitosa
+        :param details: Detalles adicionales
+        """
+        if self._collection is None:
+            try:
+                self._initialize()
+            except:
+                pass
+            
+            if self._collection is None:
+                logger.warning("MongoDB unavailable. Cannot log security event.")
+                return
+        
+        log_entry = {
+            'timestamp': datetime.utcnow(),
+            'collection_name': 'Security',
+            'action': action,
+            'user_email': user_email,
+            'ip_address': ip_address,
+            'user_agent': user_agent,
+            'success': success,
+            'details': details or {}
+        }
+        
+        try:
+            self._collection.insert_one(log_entry)
+        except Exception as e:
+            logger.error(f"Failed to write security log: {e}")
 
 # Instancia global
 audit_logger = MongoLogService()

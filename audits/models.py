@@ -38,3 +38,27 @@ class AuditEvent(AuditableModel):
     
     def __str__(self):
         return f"{self.title} - {self.event_date.strftime('%Y-%m-%d')}"
+
+
+class Evidence(AuditableModel):
+    """
+    Modelo para evidencias/archivos asociados a auditorías.
+    Soporta subida de documentos con validación de tipo y tamaño.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    audit = models.ForeignKey(Audit, on_delete=models.CASCADE, related_name='evidences')
+    file = models.FileField(upload_to='evidences/%Y/%m/%d/')
+    file_type = models.CharField(max_length=50)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-uploaded_at']
+    
+    def __str__(self):
+        return f"Evidence {self.id} - {self.audit.title}"
+    
+    def save(self, *args, **kwargs):
+        # Extraer tipo de archivo del nombre
+        if self.file and not self.file_type:
+            self.file_type = self.file.name.split('.')[-1].lower()
+        super().save(*args, **kwargs)

@@ -72,3 +72,37 @@ class AuditEventSerializer(serializers.ModelSerializer):
                 "El título del evento debe tener al menos 3 caracteres."
             )
         return value.strip()
+
+
+class EvidenceSerializer(serializers.ModelSerializer):
+    """Serializer para evidencias/archivos de auditorías."""
+    
+    ALLOWED_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'docx', 'xlsx', 'txt', 'csv']
+    MAX_SIZE = 10 * 1024 * 1024  # 10MB
+    
+    class Meta:
+        model = Audit.evidences.rel.related_model  # Evidence
+        fields = [
+            'id', 'file', 'file_type', 'uploaded_at',
+            'created_by', 'updated_by'
+        ]
+        read_only_fields = [
+            'id', 'file_type', 'uploaded_at', 'created_by', 'updated_by'
+        ]
+    
+    def validate_file(self, value):
+        """Validar tipo y tamaño de archivo."""
+        # Validar extensión
+        ext = value.name.split('.')[-1].lower()
+        if ext not in self.ALLOWED_TYPES:
+            raise serializers.ValidationError(
+                f"Tipo de archivo no permitido. Permitidos: {', '.join(self.ALLOWED_TYPES)}"
+            )
+        
+        # Validar tamaño
+        if value.size > self.MAX_SIZE:
+            raise serializers.ValidationError(
+                "El archivo no puede superar 10MB."
+            )
+        
+        return value

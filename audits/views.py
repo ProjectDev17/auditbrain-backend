@@ -43,3 +43,24 @@ class AuditEventViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         # Soft delete
         instance.delete()
+
+
+class EvidenceViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para evidencias/archivos asociados a auditorías.
+    Usa nested routes: /api/audits/{audit_id}/evidences/
+    Soporta subida de archivos multipart/form-data.
+    """
+    serializer_class = serializers.EvidenceSerializer
+    
+    def get_queryset(self):
+        audit_id = self.kwargs.get('audit_pk')
+        return Audit.objects.get(id=audit_id).evidences.filter(deleted=False)
+    
+    def perform_create(self, serializer):
+        audit_id = self.kwargs.get('audit_pk')
+        serializer.save(audit_id=audit_id)
+    
+    def perform_destroy(self, instance):
+        # Soft delete
+        instance.delete()

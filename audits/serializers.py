@@ -50,3 +50,25 @@ class AuditSerializer(serializers.ModelSerializer):
                 })
         
         return data
+
+
+class AuditEventSerializer(serializers.ModelSerializer):
+    """Serializer para eventos de calendario de auditorías."""
+    
+    class Meta:
+        model = Audit.events.rel.related_model  # AuditEvent
+        fields = [
+            'id', 'title', 'description', 'event_date',
+            'created_at', 'created_by', 'updated_at', 'updated_by'
+        ]
+        read_only_fields = [
+            'id', 'created_at', 'created_by', 'updated_at', 'updated_by'
+        ]
+    
+    def validate_title(self, value):
+        """Validar longitud mínima del título del evento."""
+        if len(value.strip()) < 3:
+            raise serializers.ValidationError(
+                "El título del evento debe tener al menos 3 caracteres."
+            )
+        return value.strip()

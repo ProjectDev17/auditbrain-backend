@@ -260,13 +260,12 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{base_url}}/api/auth/users/",
+                  "raw": "{{base_url}}/api/users/",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
                     "api",
-                    "auth",
                     "users",
                     ""
                   ]
@@ -292,13 +291,12 @@
                   "raw": "{\n  \"email\": \"newauditor@example.com\",\n  \"password\": \"pass\",\n  \"first_name\": \"New\",\n  \"last_name\": \"Auditor\",\n  \"is_auditor\": true\n}"
                 },
                 "url": {
-                  "raw": "{{base_url}}/api/auth/users/",
+                  "raw": "{{base_url}}/api/users/",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
                     "api",
-                    "auth",
                     "users",
                     ""
                   ]
@@ -316,13 +314,12 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{base_url}}/api/auth/users/{{user_id}}/",
+                  "raw": "{{base_url}}/api/users/{{user_id}}/",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
                     "api",
-                    "auth",
                     "users",
                     "{{user_id}}",
                     ""
@@ -349,13 +346,12 @@
                   "raw": "{\n  \"first_name\": \"Updated\",\n  \"is_auditor\": false\n}"
                 },
                 "url": {
-                  "raw": "{{base_url}}/api/auth/users/{{user_id}}/",
+                  "raw": "{{base_url}}/api/users/{{user_id}}/",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
                     "api",
-                    "auth",
                     "users",
                     "{{user_id}}",
                     ""
@@ -374,13 +370,12 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{base_url}}/api/auth/users/{{user_id}}/",
+                  "raw": "{{base_url}}/api/users/{{user_id}}/",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
                     "api",
-                    "auth",
                     "users",
                     "{{user_id}}",
                     ""

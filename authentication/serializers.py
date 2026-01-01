@@ -33,6 +33,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data.pop('password_confirm')
+        # Generar username desde email si no existe
+        if 'username' not in validated_data:
+            validated_data['username'] = validated_data['email'].split('@')[0]
         user = User.objects.create_user(**validated_data)
         return user
 

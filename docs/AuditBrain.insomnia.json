@@ -10,7 +10,7 @@
       "modified": 1704047560000,
       "created": 1704047560000,
       "name": "AuditBrain API - Fase 2",
-      "description": "API REST completa para gestión de auditorías con eventos y evidencias",
+      "description": "API REST completa para gesti\u00f3n de auditor\u00edas con eventos y evidencias",
       "scope": "collection",
       "_type": "workspace"
     },
@@ -49,7 +49,7 @@
       "modified": 1735689000000,
       "created": 1735689000000,
       "name": "Authentication",
-      "description": "Endpoints para autenticación JWT y gestión de usuarios",
+      "description": "Endpoints para autenticaci\u00f3n JWT y gesti\u00f3n de usuarios",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": -1735689000000,
@@ -62,14 +62,19 @@
       "created": 1735689010000,
       "url": "{{ _.base_url }}/api/auth/login/",
       "name": "Login (Obtain Token)",
-      "description": "Obtener tokens de acceso y refresh mediante email y contraseña",
+      "description": "Obtener tokens de acceso y refresh mediante email y contrase\u00f1a",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1735689010000,
       "isPrivate": false,
@@ -89,7 +94,12 @@
         "text": "{\n  \"refresh\": \"{{ _.refresh_token }}\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1735689020000,
       "isPrivate": false,
@@ -102,14 +112,19 @@
       "created": 1735689030000,
       "url": "{{ _.base_url }}/api/auth/token/verify/",
       "name": "Verify Token",
-      "description": "Verificar si un token es válido",
+      "description": "Verificar si un token es v\u00e1lido",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"token\": \"{{ _.access_token }}\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1735689030000,
       "isPrivate": false,
@@ -129,7 +144,12 @@
         "text": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"password_confirm\": \"SecurePass123!\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1735689040000,
       "isPrivate": false,
@@ -142,12 +162,15 @@
       "created": 1735689050000,
       "url": "{{ _.base_url }}/api/auth/profile/",
       "name": "Get User Profile",
-      "description": "Obtener información del perfil del usuario autenticado",
+      "description": "Obtener informaci\u00f3n del perfil del usuario autenticado",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735689050000,
@@ -161,7 +184,7 @@
       "created": 1735689060000,
       "url": "{{ _.base_url }}/api/auth/profile/",
       "name": "Update User Profile",
-      "description": "Actualizar información del perfil del usuario",
+      "description": "Actualizar informaci\u00f3n del perfil del usuario",
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
@@ -169,8 +192,14 @@
       },
       "parameters": [],
       "headers": [
-        { "name": "Content-Type", "value": "application/json" },
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735689060000,
@@ -184,14 +213,19 @@
       "created": 1735689070000,
       "url": "{{ _.base_url }}/api/auth/password/reset/",
       "name": "Request Password Reset",
-      "description": "Solicitar recuperación de contraseña por email",
+      "description": "Solicitar recuperaci\u00f3n de contrase\u00f1a por email",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"email\": \"user@example.com\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1735689070000,
       "isPrivate": false,
@@ -204,14 +238,19 @@
       "created": 1735689080000,
       "url": "{{ _.base_url }}/api/auth/password/reset/confirm/",
       "name": "Confirm Password Reset",
-      "description": "Confirmar nueva contraseña con el token recibido por email",
+      "description": "Confirmar nueva contrase\u00f1a con el token recibido por email",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
         "text": "{\n  \"token\": \"reset_token_from_email\",\n  \"new_password\": \"NewSecurePass123!\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1735689080000,
       "isPrivate": false,
@@ -223,7 +262,7 @@
       "modified": 1704047570000,
       "created": 1704047570000,
       "name": "Audits",
-      "description": "Endpoints para gestión de auditorías",
+      "description": "Endpoints para gesti\u00f3n de auditor\u00edas",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": -1704047570000,
@@ -236,7 +275,7 @@
       "created": 1704047580000,
       "url": "{{ _.base_url }}/api/audits",
       "name": "List Audits",
-      "description": "Obtener lista de auditorías con paginación",
+      "description": "Obtener lista de auditor\u00edas con paginaci\u00f3n",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -253,7 +292,7 @@
       "created": 1704047585000,
       "url": "{{ _.base_url }}/api/audits?status=pending&ordering=-created_at",
       "name": "List Audits (Filtered)",
-      "description": "Listar auditorías con filtros y ordenamiento",
+      "description": "Listar auditor\u00edas con filtros y ordenamiento",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -270,14 +309,19 @@
       "created": 1704047590000,
       "url": "{{ _.base_url }}/api/audits",
       "name": "Create Audit",
-      "description": "Crear una nueva auditoría",
+      "description": "Crear una nueva auditor\u00eda",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Auditoría de Seguridad 2024\",\n  \"description\": \"Revisión semestral de accesos y permisos.\",\n  \"status\": \"pending\"\n}"
+        "text": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos y permisos.\",\n  \"status\": \"pending\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1704047590000,
       "isPrivate": false,
@@ -307,14 +351,19 @@
       "created": 1704047610000,
       "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
       "name": "Update Audit",
-      "description": "Actualizar una auditoría existente",
+      "description": "Actualizar una auditor\u00eda existente",
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisión de accesos.\"\n}"
+        "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n de accesos.\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1704047610000,
       "isPrivate": false,
@@ -327,7 +376,7 @@
       "created": 1704047620000,
       "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
       "name": "Delete Audit (Soft)",
-      "description": "Eliminar auditoría (soft delete)",
+      "description": "Eliminar auditor\u00eda (soft delete)",
       "method": "DELETE",
       "body": {},
       "parameters": [],
@@ -356,7 +405,7 @@
       "created": 1704047640000,
       "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/",
       "name": "List Events",
-      "description": "Listar eventos de una auditoría",
+      "description": "Listar eventos de una auditor\u00eda",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -377,10 +426,15 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Revisión Inicial\",\n  \"description\": \"Primera revisión de la auditoría\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
+        "text": "{\n  \"title\": \"Revisi\u00f3n Inicial\",\n  \"description\": \"Primera revisi\u00f3n de la auditor\u00eda\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
       },
       "parameters": [],
-      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
       "authentication": {},
       "metaSortKey": -1704047650000,
       "isPrivate": false,
@@ -422,7 +476,7 @@
       "created": 1704047680000,
       "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/",
       "name": "List Evidences",
-      "description": "Listar evidencias de una auditoría",
+      "description": "Listar evidencias de una auditor\u00eda",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -482,7 +536,7 @@
       "modified": 1735700000000,
       "created": 1735700000000,
       "name": "Reports",
-      "description": "Endpoints para reportería y dashboard",
+      "description": "Endpoints para reporter\u00eda y dashboard",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": -1735700000000,
@@ -495,12 +549,15 @@
       "created": 1735700010000,
       "url": "{{ _.base_url }}/api/reports/audits/summary/",
       "name": "Audit Summary",
-      "description": "Resumen general de auditorías: totales, por estado, activas vs eliminadas",
+      "description": "Resumen general de auditor\u00edas: totales, por estado, activas vs eliminadas",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735700010000,
@@ -514,11 +571,14 @@
       "created": 1735700020000,
       "url": "{{ _.base_url }}/api/reports/audits/by-period/?grouping=monthly",
       "name": "Audits by Period",
-      "description": "Auditorías agrupadas por período (daily, weekly, monthly)",
+      "description": "Auditor\u00edas agrupadas por per\u00edodo (daily, weekly, monthly)",
       "method": "GET",
       "body": {},
       "parameters": [
-        { "name": "grouping", "value": "monthly" },
+        {
+          "name": "grouping",
+          "value": "monthly"
+        },
         {
           "name": "start_date",
           "value": "2025-01-01T00:00:00Z",
@@ -531,7 +591,10 @@
         }
       ],
       "headers": [
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735700020000,
@@ -545,12 +608,15 @@
       "created": 1735700030000,
       "url": "{{ _.base_url }}/api/reports/audits/by-user/",
       "name": "Audits by User",
-      "description": "Productividad por auditor: auditorías creadas y completadas",
+      "description": "Productividad por auditor: auditor\u00edas creadas y completadas",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735700030000,
@@ -564,12 +630,15 @@
       "created": 1735700040000,
       "url": "{{ _.base_url }}/api/reports/events/by-audit/",
       "name": "Events by Audit",
-      "description": "Resumen de eventos: totales, próximos y por auditoría",
+      "description": "Resumen de eventos: totales, pr\u00f3ximos y por auditor\u00eda",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735700040000,
@@ -583,15 +652,163 @@
       "created": 1735700050000,
       "url": "{{ _.base_url }}/api/reports/evidences/summary/",
       "name": "Evidence Summary",
-      "description": "Resumen de evidencias: totales, por tipo y por auditoría",
+      "description": "Resumen de evidencias: totales, por tipo y por auditor\u00eda",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [
-        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
       ],
       "authentication": {},
       "metaSortKey": -1735700050000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_list_global_events",
+      "parentId": "fld_events",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "url": "{{ _.base_url }}/api/events/",
+      "name": "List Global Events",
+      "description": "Listar todos los eventos de todas las auditor\u00edas",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1767304124575,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_user_mgmt",
+      "parentId": "fld_authentication",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "name": "User Management",
+      "description": "CRUD de Usuarios",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1767304124575,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_list_users",
+      "parentId": "fld_user_mgmt",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "url": "{{ _.base_url }}/api/auth/users/",
+      "name": "List Users",
+      "description": "Listar usuarios",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1767304124575,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_user",
+      "parentId": "fld_user_mgmt",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "url": "{{ _.base_url }}/api/auth/users/",
+      "name": "Create User",
+      "description": "Crear usuario (con is_auditor)",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"newauditor@example.com\",\n  \"password\": \"pass\",\n  \"first_name\": \"New\",\n  \"last_name\": \"Auditor\",\n  \"is_auditor\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1767304124575,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_user",
+      "parentId": "fld_user_mgmt",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "url": "{{ _.base_url }}/api/auth/users/{{ _.user_id }}/",
+      "name": "Get User",
+      "description": "Detalle de usuario",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1767304124575,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_user",
+      "parentId": "fld_user_mgmt",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "url": "{{ _.base_url }}/api/auth/users/{{ _.user_id }}/",
+      "name": "Update User",
+      "description": "Actualizar usuario",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"first_name\": \"Updated\",\n  \"is_auditor\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1767304124575,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_user",
+      "parentId": "fld_user_mgmt",
+      "modified": 1767304124575,
+      "created": 1767304124575,
+      "url": "{{ _.base_url }}/api/auth/users/{{ _.user_id }}/",
+      "name": "Delete User",
+      "description": "Borrado l\u00f3gico de usuario",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1767304124575,
       "isPrivate": false,
       "_type": "request"
     }

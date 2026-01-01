@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "auditbrain-collection-v2",
     "name": "AuditBrain API - Fase 2",
-    "description": "Colección completa para la API de AuditBrain con filtros, ordenamiento, eventos y evidencias.",
+    "description": "Colecci\u00f3n completa para la API de AuditBrain con filtros, ordenamiento, eventos y evidencias.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -13,32 +13,57 @@
           "name": "Login (Obtain Token)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "login", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login",
+                ""
+              ]
             },
-            "description": "Obtener tokens de acceso y refresh mediante email y contraseña"
+            "description": "Obtener tokens de acceso y refresh mediante email y contrase\u00f1a"
           }
         },
         {
           "name": "Refresh Token",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/token/refresh/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "token", "refresh", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "token",
+                "refresh",
+                ""
+              ]
             },
             "description": "Renovar el token de acceso usando el refresh token"
           }
@@ -47,32 +72,57 @@
           "name": "Verify Token",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"token\": \"{{access_token}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/token/verify/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "token", "verify", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "token",
+                "verify",
+                ""
+              ]
             },
-            "description": "Verificar si un token es válido"
+            "description": "Verificar si un token es v\u00e1lido"
           }
         },
         {
           "name": "Register User",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"password_confirm\": \"SecurePass123!\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "register", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register",
+                ""
+              ]
             },
             "description": "Registrar un nuevo usuario en el sistema"
           }
@@ -82,14 +132,24 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "url": {
               "raw": "{{base_url}}/api/auth/profile/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "profile", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "profile",
+                ""
+              ]
             },
-            "description": "Obtener información del perfil del usuario autenticado"
+            "description": "Obtener informaci\u00f3n del perfil del usuario autenticado"
           }
         },
         {
@@ -97,8 +157,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -106,45 +172,223 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/profile/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "profile", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "profile",
+                ""
+              ]
             },
-            "description": "Actualizar información del perfil del usuario"
+            "description": "Actualizar informaci\u00f3n del perfil del usuario"
           }
         },
         {
           "name": "Request Password Reset",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"user@example.com\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/password/reset/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "password", "reset", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "password",
+                "reset",
+                ""
+              ]
             },
-            "description": "Solicitar recuperación de contraseña por email"
+            "description": "Solicitar recuperaci\u00f3n de contrase\u00f1a por email"
           }
         },
         {
           "name": "Confirm Password Reset",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"token\": \"reset_token_from_email\",\n  \"new_password\": \"NewSecurePass123!\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/password/reset/confirm/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "auth", "password", "reset", "confirm", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "password",
+                "reset",
+                "confirm",
+                ""
+              ]
             },
-            "description": "Confirmar nueva contraseña con el token recibido por email"
+            "description": "Confirmar nueva contrase\u00f1a con el token recibido por email"
           }
+        },
+        {
+          "name": "User Management",
+          "item": [
+            {
+              "name": "List Users",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "users",
+                    ""
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Create User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"newauditor@example.com\",\n  \"password\": \"pass\",\n  \"first_name\": \"New\",\n  \"last_name\": \"Auditor\",\n  \"is_auditor\": true\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "users",
+                    ""
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get User",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/{{user_id}}/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "users",
+                    "{{user_id}}",
+                    ""
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update User",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"first_name\": \"Updated\",\n  \"is_auditor\": false\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/{{user_id}}/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "users",
+                    "{{user_id}}",
+                    ""
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete User",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{access_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/{{user_id}}/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "users",
+                    "{{user_id}}",
+                    ""
+                  ]
+                }
+              }
+            }
+          ]
         }
       ]
     },
@@ -158,8 +402,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                ""
+              ]
             }
           }
         },
@@ -170,11 +420,23 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/?status=pending&ordering=-created_at",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", ""],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                ""
+              ],
               "query": [
-                { "key": "status", "value": "pending" },
-                { "key": "ordering", "value": "-created_at" }
+                {
+                  "key": "status",
+                  "value": "pending"
+                },
+                {
+                  "key": "ordering",
+                  "value": "-created_at"
+                }
               ]
             }
           }
@@ -186,11 +448,23 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/?page=1&page_size=10",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", ""],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                ""
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "page_size", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "10"
+                }
               ]
             }
           }
@@ -199,15 +473,26 @@
           "name": "Create Audit",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Auditoría de Seguridad 2024\",\n  \"description\": \"Revisión semestral de accesos.\",\n  \"status\": \"pending\"\n}"
+              "raw": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos.\",\n  \"status\": \"pending\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                ""
+              ]
             }
           }
         },
@@ -218,8 +503,15 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                ""
+              ]
             }
           }
         },
@@ -227,15 +519,27 @@
           "name": "Update Audit",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisión.\"\n}"
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n.\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                ""
+              ]
             }
           }
         },
@@ -246,8 +550,15 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                ""
+              ]
             }
           }
         }
@@ -257,14 +568,40 @@
       "name": "Events",
       "item": [
         {
+          "name": "List Global Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                ""
+              ]
+            }
+          }
+        },
+        {
           "name": "List Events",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/events/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", "events", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                "events",
+                ""
+              ]
             }
           }
         },
@@ -272,15 +609,28 @@
           "name": "Create Event",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Revisión Inicial\",\n  \"description\": \"Primera revisión de la auditoría\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
+              "raw": "{\n  \"title\": \"Revisi\u00f3n Inicial\",\n  \"description\": \"Primera revisi\u00f3n de la auditor\u00eda\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/events/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", "events", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                "events",
+                ""
+              ]
             }
           }
         },
@@ -291,7 +641,9 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/events/{{event_id}}/",
-              "host": ["{{base_url}}"],
+              "host": [
+                "{{base_url}}"
+              ],
               "path": [
                 "api",
                 "audits",
@@ -315,8 +667,16 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", "evidences", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                "evidences",
+                ""
+              ]
             }
           }
         },
@@ -337,8 +697,16 @@
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "audits", "{{audit_id}}", "evidences", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "audits",
+                "{{audit_id}}",
+                "evidences",
+                ""
+              ]
             }
           }
         },
@@ -349,7 +717,9 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/{{evidence_id}}/",
-              "host": ["{{base_url}}"],
+              "host": [
+                "{{base_url}}"
+              ],
               "path": [
                 "api",
                 "audits",
@@ -371,14 +741,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/audits/summary/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reports", "audits", "summary", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "audits",
+                "summary",
+                ""
+              ]
             },
-            "description": "Resumen general de auditorías: totales, por estado, activas vs eliminadas"
+            "description": "Resumen general de auditor\u00edas: totales, por estado, activas vs eliminadas"
           }
         },
         {
@@ -386,12 +767,23 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/audits/by-period/?grouping=monthly",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reports", "audits", "by-period", ""],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "audits",
+                "by-period",
+                ""
+              ],
               "query": [
                 {
                   "key": "start_date",
@@ -403,10 +795,13 @@
                   "value": "2025-12-31T23:59:59Z",
                   "disabled": true
                 },
-                { "key": "grouping", "value": "monthly" }
+                {
+                  "key": "grouping",
+                  "value": "monthly"
+                }
               ]
             },
-            "description": "Auditorías agrupadas por período (daily, weekly, monthly). Datos listos para gráficos."
+            "description": "Auditor\u00edas agrupadas por per\u00edodo (daily, weekly, monthly). Datos listos para gr\u00e1ficos."
           }
         },
         {
@@ -414,14 +809,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/audits/by-user/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reports", "audits", "by-user", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "audits",
+                "by-user",
+                ""
+              ]
             },
-            "description": "Productividad por auditor: auditorías creadas y completadas por usuario"
+            "description": "Productividad por auditor: auditor\u00edas creadas y completadas por usuario"
           }
         },
         {
@@ -429,14 +835,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/events/by-audit/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reports", "events", "by-audit", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "events",
+                "by-audit",
+                ""
+              ]
             },
-            "description": "Resumen de eventos: totales, próximos y agrupados por auditoría"
+            "description": "Resumen de eventos: totales, pr\u00f3ximos y agrupados por auditor\u00eda"
           }
         },
         {
@@ -444,14 +861,25 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/evidences/summary/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reports", "evidences", "summary", ""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "evidences",
+                "summary",
+                ""
+              ]
             },
-            "description": "Resumen de evidencias: totales, por tipo de archivo y por auditoría"
+            "description": "Resumen de evidencias: totales, por tipo de archivo y por auditor\u00eda"
           }
         }
       ]

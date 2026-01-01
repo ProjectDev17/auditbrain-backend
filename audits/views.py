@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Audit
+from .models import Audit, AuditEvent
 from . import serializers
 from .filters import AuditFilter
 
@@ -49,6 +49,15 @@ class AuditEventViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         # Soft delete
         instance.delete()
+
+
+class GlobalAuditEventViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet para listar todos los eventos de auditoría (solo lectura).
+    Ruta: /api/events/
+    """
+    queryset = AuditEvent.objects.filter(deleted=False)
+    serializer_class = serializers.AuditEventSerializer
 
 
 class EvidenceViewSet(viewsets.ModelViewSet):

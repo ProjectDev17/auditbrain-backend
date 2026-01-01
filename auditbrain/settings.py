@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "core",
     "authentication",
     "audits",
+    "reports",
 ]
 
 MIDDLEWARE = [

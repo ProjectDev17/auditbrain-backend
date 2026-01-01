@@ -7,6 +7,148 @@
   },
   "item": [
     {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login (Obtain Token)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login", ""]
+            },
+            "description": "Obtener tokens de acceso y refresh mediante email y contraseña"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/token/refresh/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "token", "refresh", ""]
+            },
+            "description": "Renovar el token de acceso usando el refresh token"
+          }
+        },
+        {
+          "name": "Verify Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{access_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/token/verify/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "token", "verify", ""]
+            },
+            "description": "Verificar si un token es válido"
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"password_confirm\": \"SecurePass123!\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register", ""]
+            },
+            "description": "Registrar un nuevo usuario en el sistema"
+          }
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile", ""]
+            },
+            "description": "Obtener información del perfil del usuario autenticado"
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile", ""]
+            },
+            "description": "Actualizar información del perfil del usuario"
+          }
+        },
+        {
+          "name": "Request Password Reset",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/password/reset/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "password", "reset", ""]
+            },
+            "description": "Solicitar recuperación de contraseña por email"
+          }
+        },
+        {
+          "name": "Confirm Password Reset",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"reset_token_from_email\",\n  \"new_password\": \"NewSecurePass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/password/reset/confirm/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "password", "reset", "confirm", ""]
+            },
+            "description": "Confirmar nueva contraseña con el token recibido por email"
+          }
+        }
+      ]
+    },
+    {
       "name": "Audits",
       "item": [
         {
@@ -220,12 +362,115 @@
           }
         }
       ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Audit Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/audits/summary/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "audits", "summary", ""]
+            },
+            "description": "Resumen general de auditorías: totales, por estado, activas vs eliminadas"
+          }
+        },
+        {
+          "name": "Audits by Period",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/audits/by-period/?grouping=monthly",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "audits", "by-period", ""],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2025-01-01T00:00:00Z",
+                  "disabled": true
+                },
+                {
+                  "key": "end_date",
+                  "value": "2025-12-31T23:59:59Z",
+                  "disabled": true
+                },
+                { "key": "grouping", "value": "monthly" }
+              ]
+            },
+            "description": "Auditorías agrupadas por período (daily, weekly, monthly). Datos listos para gráficos."
+          }
+        },
+        {
+          "name": "Audits by User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/audits/by-user/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "audits", "by-user", ""]
+            },
+            "description": "Productividad por auditor: auditorías creadas y completadas por usuario"
+          }
+        },
+        {
+          "name": "Events by Audit",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/events/by-audit/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "events", "by-audit", ""]
+            },
+            "description": "Resumen de eventos: totales, próximos y agrupados por auditoría"
+          }
+        },
+        {
+          "name": "Evidence Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/evidences/summary/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "evidences", "summary", ""]
+            },
+            "description": "Resumen de evidencias: totales, por tipo de archivo y por auditoría"
+          }
+        }
+      ]
     }
   ],
   "variable": [
     {
       "key": "base_url",
       "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
       "type": "string"
     },
     {

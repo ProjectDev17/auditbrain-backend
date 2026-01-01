@@ -108,6 +108,50 @@ Importar `docs/AuditBrain.insomnia.json` en Insomnia.
 > [!NOTE]
 > Si usas MongoDB local (no Docker), asegúrate de actualizar `MONGO_URI` en `.env` o en `settings.py`.
 
+## Características
+
+### Fase 1 - CRUD Básico de Auditorías
+
+- ✅ Gestión completa de auditorías (crear, listar, actualizar, eliminar)
+- ✅ Soft delete para mantener historial
+- ✅ Filtros y ordenamiento
+- ✅ Paginación
+
+### Fase 2 - Eventos y Evidencias
+
+- ✅ Eventos de calendario asociados a auditorías
+- ✅ Subida y gestión de evidencias (archivos)
+- ✅ Nested routes para eventos y evidencias
+
+### Fase 3 - Autenticación y Seguridad
+
+- ✅ Autenticación JWT con SimpleJWT
+- ✅ Modelo de usuario personalizado con email
+- ✅ Registro y gestión de perfiles
+- ✅ Recuperación de contraseña
+- ✅ Logging de eventos de seguridad en MongoDB
+- ✅ Throttling y protección contra brute force
+
+### Fase 4 - Reportería y Dashboard
+
+- ✅ Endpoints de reportería optimizados
+- ✅ Resumen general de auditorías
+- ✅ Auditorías por período (diario, semanal, mensual)
+- ✅ Productividad por auditor
+- ✅ Resumen de eventos y evidencias
+- ✅ Datos listos para gráficos (Chart.js, Recharts, etc.)
+- ✅ Logging de consultas de reportería
+
+**Endpoints de Reportería:**
+
+- `GET /api/reports/audits/summary/` - Resumen general
+- `GET /api/reports/audits/by-period/` - Tendencias temporales
+- `GET /api/reports/audits/by-user/` - Productividad por usuario
+- `GET /api/reports/events/by-audit/` - Resumen de eventos
+- `GET /api/reports/evidences/summary/` - Resumen de evidencias
+
+Ver [Guía de Reportería](docs/REPORTS_GUIDE.md) para ejemplos de integración.
+
 ## Admin Panel
 
 Acceder a `http://localhost:8000/admin/` con las credenciales del superusuario para gestionar auditorías desde la interfaz administrativa.

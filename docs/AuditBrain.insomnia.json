@@ -22,17 +22,200 @@
       "name": "Base Environment",
       "data": {
         "base_url": "http://localhost:8000",
+        "access_token": "",
+        "refresh_token": "",
         "audit_id": "",
         "event_id": "",
         "evidence_id": ""
       },
       "dataPropertyOrder": {
-        "&": ["base_url", "audit_id", "event_id", "evidence_id"]
+        "&": [
+          "base_url",
+          "access_token",
+          "refresh_token",
+          "audit_id",
+          "event_id",
+          "evidence_id"
+        ]
       },
       "color": null,
       "isPrivate": false,
       "metaSortKey": 1704047565000,
       "_type": "environment"
+    },
+    {
+      "_id": "fld_authentication",
+      "parentId": "wrk_auditbrain",
+      "modified": 1735689000000,
+      "created": 1735689000000,
+      "name": "Authentication",
+      "description": "Endpoints para autenticación JWT y gestión de usuarios",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1735689000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_login",
+      "parentId": "fld_authentication",
+      "modified": 1735689010000,
+      "created": 1735689010000,
+      "url": "{{ _.base_url }}/api/auth/login/",
+      "name": "Login (Obtain Token)",
+      "description": "Obtener tokens de acceso y refresh mediante email y contraseña",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}"
+      },
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1735689010000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_refresh_token",
+      "parentId": "fld_authentication",
+      "modified": 1735689020000,
+      "created": 1735689020000,
+      "url": "{{ _.base_url }}/api/auth/token/refresh/",
+      "name": "Refresh Token",
+      "description": "Renovar el token de acceso usando el refresh token",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"refresh\": \"{{ _.refresh_token }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1735689020000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_verify_token",
+      "parentId": "fld_authentication",
+      "modified": 1735689030000,
+      "created": 1735689030000,
+      "url": "{{ _.base_url }}/api/auth/token/verify/",
+      "name": "Verify Token",
+      "description": "Verificar si un token es válido",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"token\": \"{{ _.access_token }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1735689030000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_register",
+      "parentId": "fld_authentication",
+      "modified": 1735689040000,
+      "created": 1735689040000,
+      "url": "{{ _.base_url }}/api/auth/register/",
+      "name": "Register User",
+      "description": "Registrar un nuevo usuario en el sistema",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"password_confirm\": \"SecurePass123!\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\"\n}"
+      },
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1735689040000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_profile",
+      "parentId": "fld_authentication",
+      "modified": 1735689050000,
+      "created": 1735689050000,
+      "url": "{{ _.base_url }}/api/auth/profile/",
+      "name": "Get User Profile",
+      "description": "Obtener información del perfil del usuario autenticado",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735689050000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_profile",
+      "parentId": "fld_authentication",
+      "modified": 1735689060000,
+      "created": 1735689060000,
+      "url": "{{ _.base_url }}/api/auth/profile/",
+      "name": "Update User Profile",
+      "description": "Actualizar información del perfil del usuario",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735689060000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_password_reset",
+      "parentId": "fld_authentication",
+      "modified": 1735689070000,
+      "created": 1735689070000,
+      "url": "{{ _.base_url }}/api/auth/password/reset/",
+      "name": "Request Password Reset",
+      "description": "Solicitar recuperación de contraseña por email",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\"\n}"
+      },
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1735689070000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_password_reset_confirm",
+      "parentId": "fld_authentication",
+      "modified": 1735689080000,
+      "created": 1735689080000,
+      "url": "{{ _.base_url }}/api/auth/password/reset/confirm/",
+      "name": "Confirm Password Reset",
+      "description": "Confirmar nueva contraseña con el token recibido por email",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"token\": \"reset_token_from_email\",\n  \"new_password\": \"NewSecurePass123!\"\n}"
+      },
+      "parameters": [],
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "authentication": {},
+      "metaSortKey": -1735689080000,
+      "isPrivate": false,
+      "_type": "request"
     },
     {
       "_id": "fld_audits",
@@ -290,6 +473,125 @@
       "headers": [],
       "authentication": {},
       "metaSortKey": -1704047700000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_reports",
+      "parentId": "wrk_auditbrain",
+      "modified": 1735700000000,
+      "created": 1735700000000,
+      "name": "Reports",
+      "description": "Endpoints para reportería y dashboard",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1735700000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_audit_summary",
+      "parentId": "fld_reports",
+      "modified": 1735700010000,
+      "created": 1735700010000,
+      "url": "{{ _.base_url }}/api/reports/audits/summary/",
+      "name": "Audit Summary",
+      "description": "Resumen general de auditorías: totales, por estado, activas vs eliminadas",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735700010000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_audits_by_period",
+      "parentId": "fld_reports",
+      "modified": 1735700020000,
+      "created": 1735700020000,
+      "url": "{{ _.base_url }}/api/reports/audits/by-period/?grouping=monthly",
+      "name": "Audits by Period",
+      "description": "Auditorías agrupadas por período (daily, weekly, monthly)",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        { "name": "grouping", "value": "monthly" },
+        {
+          "name": "start_date",
+          "value": "2025-01-01T00:00:00Z",
+          "disabled": true
+        },
+        {
+          "name": "end_date",
+          "value": "2025-12-31T23:59:59Z",
+          "disabled": true
+        }
+      ],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735700020000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_audits_by_user",
+      "parentId": "fld_reports",
+      "modified": 1735700030000,
+      "created": 1735700030000,
+      "url": "{{ _.base_url }}/api/reports/audits/by-user/",
+      "name": "Audits by User",
+      "description": "Productividad por auditor: auditorías creadas y completadas",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735700030000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_events_by_audit",
+      "parentId": "fld_reports",
+      "modified": 1735700040000,
+      "created": 1735700040000,
+      "url": "{{ _.base_url }}/api/reports/events/by-audit/",
+      "name": "Events by Audit",
+      "description": "Resumen de eventos: totales, próximos y por auditoría",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735700040000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_evidence_summary",
+      "parentId": "fld_reports",
+      "modified": 1735700050000,
+      "created": 1735700050000,
+      "url": "{{ _.base_url }}/api/reports/evidences/summary/",
+      "name": "Evidence Summary",
+      "description": "Resumen de evidencias: totales, por tipo y por auditoría",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{ _.access_token }}" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735700050000,
       "isPrivate": false,
       "_type": "request"
     }

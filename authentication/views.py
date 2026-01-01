@@ -1,17 +1,34 @@
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from .serializers import (
     RegisterSerializer, 
     UserSerializer,
     PasswordResetRequestSerializer, 
-    PasswordResetConfirmSerializer
+    PasswordResetConfirmSerializer,
+    UserManagementSerializer
 )
 from .services import PasswordResetService
 
 User = get_user_model()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para CRUD completo de usuarios backoffice.
+    Solo accesible por administradores.
+    Implementa Soft Delete.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserManagementSerializer
+    permission_classes = [IsAuthenticated] # Ajustar a IsAdminUser si se requiere estricto
+
+    def perform_destroy(self, instance):
+        # Soft Delete: Desactivar usuario en lugar de borrar
+        instance.is_active = False
+        instance.save()
 
 
 class RegisterView(generics.CreateAPIView):

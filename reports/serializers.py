@@ -67,8 +67,8 @@ class EventSummaryReportSerializer(serializers.Serializer):
 
 class ReportFilterSerializer(serializers.Serializer):
     """Serializer para validar filtros de reportes."""
-    start_date = serializers.DateTimeField(required=False, allow_null=True)
-    end_date = serializers.DateTimeField(required=False, allow_null=True)
+    start_date = serializers.DateField(required=False, allow_null=True)
+    end_date = serializers.DateField(required=False, allow_null=True)
     user_id = serializers.UUIDField(required=False, allow_null=True)
     auditor = serializers.UUIDField(required=False, allow_null=True)
     status = serializers.ChoiceField(

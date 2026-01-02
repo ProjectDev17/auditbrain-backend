@@ -2,10 +2,10 @@
 Servicios de agregación y utilidades para reportería.
 Centraliza la lógica de negocio para cálculos y agregaciones de datos.
 """
+import datetime as dt
 from django.db.models import Count, Q, F
 from django.db.models.functions import TruncDate, TruncWeek, TruncMonth
 from django.utils import timezone
-from datetime import datetime, timedelta
 from audits.models import Audit, AuditEvent, Evidence
 from authentication.models import CustomUser
 from core.services import audit_logger
@@ -22,13 +22,27 @@ def apply_report_filters(queryset, filters, date_field='created_at'):
     start_date = filters.get('start_date')
     if start_date:
         if isinstance(start_date, str):
-            start_date = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            start_date = dt.datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        
+        # Si es un objeto date puro (pero no datetime), convertir a datetime
+        if isinstance(start_date, dt.date) and not isinstance(start_date, dt.datetime):
+            start_date = dt.datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
+            if timezone.is_aware(timezone.now()):
+                start_date = timezone.make_aware(start_date)
+        
         queryset = queryset.filter(**{f"{date_field}__gte": start_date})
     
     end_date = filters.get('end_date')
     if end_date:
         if isinstance(end_date, str):
-            end_date = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            end_date = dt.datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+        
+        # Si es un objeto date puro (pero no datetime), convertir a datetime
+        if isinstance(end_date, dt.date) and not isinstance(end_date, dt.datetime):
+            end_date = dt.datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59, 999999)
+            if timezone.is_aware(timezone.now()):
+                end_date = timezone.make_aware(end_date)
+            
         queryset = queryset.filter(**{f"{date_field}__lte": end_date})
     
     # Filtro de auditor (usuario asignado)
@@ -264,19 +278,20 @@ def get_event_summary_report(filters=None):
         dict: Totales y desglose por fecha
     """
     queryset = AuditEvent.objects.filter(deleted=False)
+    
+    # Si no hay filtros de fecha, mostrar últimos 30 días por defecto
+    if not filters or (not filters.get('start_date') and not filters.get('end_date')):
+        default_start = timezone.now() - dt.timedelta(days=30)
+        queryset = queryset.filter(event_date__gte=default_start)
+    
+    # Aplicar filtros adicionales de la request
     queryset = apply_report_filters(queryset, filters, date_field='event_date')
     
     total_events = queryset.count()
     
-    # Si no hay filtros de fecha, mostrar últimos 30 días por defecto
-    if not filters or (not filters.get('start_date') and not filters.get('end_date')):
-        start_date = timezone.now() - timedelta(days=30)
-        queryset = queryset.filter(event_date__gte=start_date)
-    
-    # Agrupar por fecha
+    # Agrupar por fecha usando el queryset ya filtrado
     events_by_date = (
         queryset
-        .filter(event_date__gte=start_date)
         .annotate(date=TruncDate('event_date'))
         .values('date')
         .annotate(count=Count('id'))
@@ -319,8 +334,8 @@ def log_report_query(report_type, filters, execution_time_ms, user=None):
         for key, value in filters.items():
             if isinstance(value, uuid.UUID):
                 serializable_filters[key] = str(value)
-            elif isinstance(value, (datetime, timedelta)):
-                serializable_filters[key] = str(value) # Omitir datetime objects directos si mongo no los quiere o formatear
+            elif isinstance(value, (dt.datetime, dt.date, dt.timedelta)):
+                serializable_filters[key] = str(value)
             else:
                 serializable_filters[key] = value
 

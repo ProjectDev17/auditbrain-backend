@@ -8,13 +8,19 @@ from .serializers import (
     UserSerializer,
     PasswordResetRequestSerializer, 
     PasswordResetConfirmSerializer,
-    PasswordResetConfirmSerializer,
     UserManagementSerializer,
     GroupSerializer,
-    PermissionSerializer
+    PermissionSerializer,
+    CustomTokenObtainPairSerializer
 )
 from .services import PasswordResetService
 from django.contrib.auth.models import Group, Permission
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """View personalizada para login que usa nuestro serializer extendido."""
+    serializer_class = CustomTokenObtainPairSerializer
 
 User = get_user_model()
 

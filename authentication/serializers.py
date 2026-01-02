@@ -2,17 +2,41 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.models import Group, Permission
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer para información básica del usuario."""
+    is_auditor = serializers.SerializerMethodField()
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'date_joined']
+        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'date_joined']
         read_only_fields = ['id', 'date_joined']
+
+    def get_is_auditor(self, obj):
+        return obj.groups.filter(name='Auditors').exists()
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Custom JWT Serializer para incluir información adicional del usuario en la respuesta."""
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        # Añadir información del usuario a la respuesta
+        data['user'] = {
+            'id': str(self.user.id),
+            'email': self.user.email,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'is_auditor': self.user.groups.filter(name='Auditors').exists(),
+            'is_active': self.user.is_active,
+        }
+        
+        return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):

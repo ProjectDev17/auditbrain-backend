@@ -8,9 +8,13 @@ from .serializers import (
     UserSerializer,
     PasswordResetRequestSerializer, 
     PasswordResetConfirmSerializer,
-    UserManagementSerializer
+    PasswordResetConfirmSerializer,
+    UserManagementSerializer,
+    GroupSerializer,
+    PermissionSerializer
 )
 from .services import PasswordResetService
+from django.contrib.auth.models import Group, Permission
 
 User = get_user_model()
 
@@ -29,6 +33,24 @@ class UserViewSet(viewsets.ModelViewSet):
         # Soft Delete: Desactivar usuario en lugar de borrar
         instance.is_active = False
         instance.save()
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para CRUD de Grupos.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class PermissionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet de solo lectura para Permisos.
+    """
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class RegisterView(generics.CreateAPIView):

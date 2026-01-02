@@ -1,12 +1,14 @@
 from rest_framework_nested import routers
 from .views import AuditViewSet, AuditEventViewSet, EvidenceViewSet, GlobalAuditEventViewSet
-from authentication.views import UserViewSet
+from authentication.views import UserViewSet, GroupViewSet, PermissionViewSet
 
 # Router principal
 router = routers.DefaultRouter()
 router.register(r'audits', AuditViewSet, basename='audit')
 router.register(r'events', GlobalAuditEventViewSet, basename='global-events')
 router.register(r'users', UserViewSet, basename='user')
+router.register(r'groups', GroupViewSet, basename='group')
+router.register(r'permissions', PermissionViewSet, basename='permission')
 
 # Nested router para eventos
 audits_router = routers.NestedDefaultRouter(router, r'audits', lookup='audit')

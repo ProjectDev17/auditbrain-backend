@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.models import Group, Permission
 
 User = get_user_model()
 
@@ -117,3 +118,25 @@ class UserManagementSerializer(serializers.ModelSerializer):
                 instance.groups.remove(group)
                 
         return instance
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    """Serializer para permisos de Django."""
+    
+    class Meta:
+        from django.contrib.auth.models import Permission
+        model = Permission
+        fields = ['id', 'name', 'codename', 'content_type']
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    """Serializer para grupos de usuario."""
+    permissions = serializers.PrimaryKeyRelatedField(
+        many=True, 
+        queryset=Permission.objects.all(),
+        required=False
+    )
+
+    class Meta:
+        model = Group
+        fields = ['id', 'name', 'permissions']

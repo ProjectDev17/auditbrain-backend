@@ -62,3 +62,20 @@ class Evidence(AuditableModel):
         if self.file and not self.file_type:
             self.file_type = self.file.name.split('.')[-1].lower()
         super().save(*args, **kwargs)
+
+
+class AuditEvidence(AuditableModel):
+    """
+    Modelo intermedio para asociar evidencias con auditorías.
+    Permite relación muchos-a-muchos con metadatos de auditoría.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    audit = models.ForeignKey(Audit, on_delete=models.CASCADE, related_name='audit_evidences')
+    evidence = models.ForeignKey(Evidence, on_delete=models.CASCADE, related_name='audit_evidences')
+
+    class Meta:
+        unique_together = ['audit', 'evidence']
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Audit {self.audit.title} - Evidence {self.evidence.id}"

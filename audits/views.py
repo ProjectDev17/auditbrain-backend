@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Audit, AuditEvent, Evidence
+from .models import Audit, AuditEvent, Evidence, AuditEvidence
 from . import serializers
 from .filters import AuditFilter
 
@@ -92,3 +92,17 @@ class GlobalEvidenceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Evidence.objects.filter(deleted=False)
     serializer_class = serializers.EvidenceSerializer
     ordering_fields = '__all__'
+
+
+class AuditEvidenceViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestionar asociaciones Audit-Evidence.
+    Ruta: /api/audit-evidences/
+    """
+    queryset = AuditEvidence.objects.filter(deleted=False)
+    serializer_class = serializers.AuditEvidenceSerializer
+    ordering_fields = '__all__'
+
+    def perform_destroy(self, instance):
+        # Soft delete
+        instance.delete()

@@ -137,3 +137,22 @@ class AuditDetailSerializer(serializers.ModelSerializer):
         """Obtener historial de cambios desde MongoDB."""
         from core.services import audit_logger
         return audit_logger.get_history(resource_id=str(obj.id), limit=20)
+
+
+class AuditEvidenceSerializer(serializers.ModelSerializer):
+    """Serializer para asociaciones Audit-Evidence."""
+    from .models import AuditEvidence
+    
+    class Meta:
+        from .models import AuditEvidence
+        model = AuditEvidence
+        fields = [
+            'id', 'audit', 'evidence',
+            'created_at', 'updated_at',
+            'created_by', 'updated_by',
+            'deleted'
+        ]
+        read_only_fields = [
+            'id', 'created_at', 'updated_at',
+            'created_by', 'updated_by', 'deleted'
+        ]

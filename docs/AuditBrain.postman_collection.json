@@ -25,15 +25,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/login/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "login",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login", ""]
             },
             "description": "Obtener tokens de acceso y refresh mediante email y contrase\u00f1a"
           }
@@ -54,16 +47,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/token/refresh/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "token",
-                "refresh",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "token", "refresh", ""]
             },
             "description": "Renovar el token de acceso usando el refresh token"
           }
@@ -84,16 +69,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/token/verify/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "token",
-                "verify",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "token", "verify", ""]
             },
             "description": "Verificar si un token es v\u00e1lido"
           }
@@ -114,15 +91,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/register/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "register",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register", ""]
             },
             "description": "Registrar un nuevo usuario en el sistema"
           }
@@ -139,15 +109,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/auth/profile/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "profile",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile", ""]
             },
             "description": "Obtener informaci\u00f3n del perfil del usuario autenticado"
           }
@@ -172,15 +135,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/profile/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "profile",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile", ""]
             },
             "description": "Actualizar informaci\u00f3n del perfil del usuario"
           }
@@ -201,16 +157,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/password/reset/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "password",
-                "reset",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "password", "reset", ""]
             },
             "description": "Solicitar recuperaci\u00f3n de contrase\u00f1a por email"
           }
@@ -231,17 +179,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/auth/password/reset/confirm/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "auth",
-                "password",
-                "reset",
-                "confirm",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "password", "reset", "confirm", ""]
             },
             "description": "Confirmar nueva contrase\u00f1a con el token recibido por email"
           }
@@ -261,14 +200,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/users/",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    ""
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", ""]
                 }
               }
             },
@@ -292,14 +225,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/api/users/",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    ""
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", ""]
                 }
               }
             },
@@ -315,15 +242,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/users/{{user_id}}/",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "{{user_id}}",
-                    ""
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "{{user_id}}", ""]
                 }
               }
             },
@@ -347,15 +267,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/api/users/{{user_id}}/",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "{{user_id}}",
-                    ""
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "{{user_id}}", ""]
                 }
               }
             },
@@ -371,19 +284,59 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/users/{{user_id}}/",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "users",
-                    "{{user_id}}",
-                    ""
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "{{user_id}}", ""]
                 }
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Audit Types",
+      "item": [
+        {
+          "name": "List Audit Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/audit-types/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audit-types", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Audit Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Seguridad IT\",\n  \"description\": \"Auditor\u00edas enfocadas en infraestructura y accesos.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/audit-types/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "audit-types", ""]
+            }
+          }
         }
       ]
     },
@@ -397,14 +350,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""]
             }
           }
         },
@@ -415,14 +362,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/?status=pending&ordering=-created_at",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                ""
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""],
               "query": [
                 {
                   "key": "status",
@@ -443,14 +384,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/?page=1&page_size=10",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                ""
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""],
               "query": [
                 {
                   "key": "page",
@@ -476,18 +411,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos.\",\n  \"status\": \"pending\"\n}"
+              "raw": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos.\",\n  \"status\": \"pending\",\n  \"audit_type_id\": \"{{audit_type_id}}\",\n  \"auditor_id\": \"{{user_id}}\",\n  \"start_date\": \"2024-01-01\",\n  \"end_date\": \"2024-06-30\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", ""]
             }
           }
         },
@@ -498,15 +427,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", ""]
             }
           }
         },
@@ -522,19 +444,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n.\"\n}"
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n.\",\n  \"auditor_id\": \"{{user_id}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", ""]
             }
           }
         },
@@ -545,15 +460,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", ""]
             }
           }
         }
@@ -569,14 +477,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "events",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", ""]
             }
           }
         },
@@ -587,16 +489,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/events/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                "events",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "events", ""]
             }
           }
         },
@@ -616,16 +510,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/events/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                "events",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "events", ""]
             }
           }
         },
@@ -636,9 +522,7 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/events/{{event_id}}/",
-              "host": [
-                "{{base_url}}"
-              ],
+              "host": ["{{base_url}}"],
               "path": [
                 "api",
                 "audits",
@@ -662,16 +546,8 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                "evidences",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "evidences", ""]
             }
           }
         },
@@ -692,16 +568,8 @@
             },
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "audits",
-                "{{audit_id}}",
-                "evidences",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "audits", "{{audit_id}}", "evidences", ""]
             }
           }
         },
@@ -712,9 +580,7 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/audits/{{audit_id}}/evidences/{{evidence_id}}/",
-              "host": [
-                "{{base_url}}"
-              ],
+              "host": ["{{base_url}}"],
               "path": [
                 "api",
                 "audits",
@@ -743,15 +609,25 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/audits/summary/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "audits",
-                "summary",
-                ""
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "audits", "summary", ""],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2024-12-31"
+                },
+                {
+                  "key": "status",
+                  "value": "completed"
+                },
+                {
+                  "key": "auditor",
+                  "value": "{{user_id}}"
+                }
               ]
             },
             "description": "Resumen general de auditor\u00edas: totales, por estado, activas vs eliminadas"
@@ -769,26 +645,24 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/audits/by-period/?grouping=monthly",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "audits",
-                "by-period",
-                ""
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "audits", "by-period", ""],
               "query": [
                 {
                   "key": "start_date",
-                  "value": "2025-01-01T00:00:00Z",
-                  "disabled": true
+                  "value": "2024-01-01"
                 },
                 {
                   "key": "end_date",
-                  "value": "2025-12-31T23:59:59Z",
-                  "disabled": true
+                  "value": "2024-12-31"
+                },
+                {
+                  "key": "status",
+                  "value": "completed"
+                },
+                {
+                  "key": "auditor",
+                  "value": "{{user_id}}"
                 },
                 {
                   "key": "grouping",
@@ -811,16 +685,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/audits/by-user/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "audits",
-                "by-user",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "audits", "by-user", ""]
             },
             "description": "Productividad por auditor: auditor\u00edas creadas y completadas por usuario"
           }
@@ -837,16 +703,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/events/by-audit/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "events",
-                "by-audit",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "events", "by-audit", ""]
             },
             "description": "Resumen de eventos: totales, pr\u00f3ximos y agrupados por auditor\u00eda"
           }
@@ -863,16 +721,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/reports/evidences/summary/",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "reports",
-                "evidences",
-                "summary",
-                ""
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "reports", "evidences", "summary", ""]
             },
             "description": "Resumen de evidencias: totales, por tipo de archivo y por auditor\u00eda"
           }
@@ -908,6 +758,16 @@
     },
     {
       "key": "evidence_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "audit_type_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
       "value": "",
       "type": "string"
     }

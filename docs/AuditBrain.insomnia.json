@@ -26,7 +26,9 @@
         "refresh_token": "",
         "audit_id": "",
         "event_id": "",
-        "evidence_id": ""
+        "evidence_id": "",
+        "audit_type_id": "",
+        "user_id": ""
       },
       "dataPropertyOrder": {
         "&": [
@@ -313,7 +315,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos y permisos.\",\n  \"status\": \"pending\"\n}"
+        "text": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos y permisos.\",\n  \"status\": \"pending\",\n  \"audit_type_id\": \"{{ _.audit_type_id }}\",\n  \"auditor_id\": \"{{ _.user_id }}\",\n  \"start_date\": \"2024-01-01\",\n  \"end_date\": \"2024-06-30\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -355,7 +357,7 @@
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n de accesos.\"\n}"
+        "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n de accesos.\",\n  \"auditor_id\": \"{{ _.user_id }}\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -581,13 +583,19 @@
         },
         {
           "name": "start_date",
-          "value": "2025-01-01T00:00:00Z",
-          "disabled": true
+          "value": "2024-01-01"
         },
         {
           "name": "end_date",
-          "value": "2025-12-31T23:59:59Z",
-          "disabled": true
+          "value": "2024-12-31"
+        },
+        {
+          "name": "status",
+          "value": "completed"
+        },
+        {
+          "name": "auditor",
+          "value": "{{ _.user_id }}"
         }
       ],
       "headers": [
@@ -809,6 +817,100 @@
       ],
       "authentication": {},
       "metaSortKey": -1767304124575,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_audit_types",
+      "parentId": "wrk_auditbrain",
+      "modified": 1735701000000,
+      "created": 1735701000000,
+      "name": "Audit Types",
+      "description": "Endpoints para gesti\u00f3n de tipos de auditor\u00eda",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1735701000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_list_audit_types",
+      "parentId": "fld_audit_types",
+      "modified": 1735701010000,
+      "created": 1735701010000,
+      "url": "{{ _.base_url }}/api/audit-types/",
+      "name": "List Audit Types",
+      "description": "Listar tipos de auditor\u00eda",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735701010000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_audit_type",
+      "parentId": "fld_audit_types",
+      "modified": 1735701020000,
+      "created": 1735701020000,
+      "url": "{{ _.base_url }}/api/audit-types/",
+      "name": "Create Audit Type",
+      "description": "Crear tipo de auditor\u00eda",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Seguridad IT\",\n  \"description\": \"Auditor\u00edas enfocadas en infraestructura y accesos.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735701020000,
+      "isPrivate": false,
+      "_type": "request"
+    },
+    {
+      "_id": "req_event_summary_report",
+      "parentId": "fld_reports",
+      "modified": 1735701030000,
+      "created": 1735701030000,
+      "url": "{{ _.base_url }}/api/reports/events/summary/",
+      "name": "Event Summary Report",
+      "description": "Reporte resumen de eventos con distribuci\u00f3n por fecha",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "start_date",
+          "value": "2024-01-01"
+        },
+        {
+          "name": "end_date",
+          "value": "2024-12-31"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.access_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735701030000,
       "isPrivate": false,
       "_type": "request"
     }

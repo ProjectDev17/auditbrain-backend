@@ -29,8 +29,18 @@ class AuditSummaryView(APIView):
     def get(self, request):
         start_time = time()
         
+        # Validar filtros
+        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        if not filter_serializer.is_valid():
+            return Response(
+                filter_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        filters = filter_serializer.validated_data
+        
         # Obtener datos
-        data = services.get_audit_summary()
+        data = services.get_audit_summary(filters=filters)
         
         # Serializar respuesta
         serializer = serializers.AuditSummarySerializer(data)
@@ -39,7 +49,7 @@ class AuditSummaryView(APIView):
         execution_time = int((time() - start_time) * 1000)
         services.log_report_query(
             report_type='audit_summary',
-            filters={},
+            filters=filters,
             execution_time_ms=execution_time,
             user=request.user
         )
@@ -76,11 +86,7 @@ class AuditByPeriodView(APIView):
         filters = filter_serializer.validated_data
         
         # Obtener datos
-        data = services.get_audits_by_period(
-            start_date=filters.get('start_date'),
-            end_date=filters.get('end_date'),
-            grouping=filters.get('grouping', 'monthly')
-        )
+        data = services.get_audits_by_period(filters=filters)
         
         # Serializar respuesta
         serializer = serializers.AuditByPeriodSerializer(data)
@@ -112,8 +118,18 @@ class AuditByUserView(APIView):
     def get(self, request):
         start_time = time()
         
+        # Validar filtros
+        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        if not filter_serializer.is_valid():
+            return Response(
+                filter_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        filters = filter_serializer.validated_data
+        
         # Obtener datos
-        data = services.get_audits_by_user()
+        data = services.get_audits_by_user(filters=filters)
         
         # Serializar respuesta
         serializer = serializers.UserProductivitySerializer(data, many=True)
@@ -122,7 +138,7 @@ class AuditByUserView(APIView):
         execution_time = int((time() - start_time) * 1000)
         services.log_report_query(
             report_type='audit_by_user',
-            filters={},
+            filters=filters,
             execution_time_ms=execution_time,
             user=request.user
         )
@@ -146,8 +162,18 @@ class EventsByAuditView(APIView):
     def get(self, request):
         start_time = time()
         
+        # Validar filtros
+        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        if not filter_serializer.is_valid():
+            return Response(
+                filter_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        filters = filter_serializer.validated_data
+        
         # Obtener datos
-        data = services.get_events_by_audit()
+        data = services.get_events_by_audit(filters=filters)
         
         # Serializar respuesta
         serializer = serializers.EventsByAuditSerializer(data)
@@ -156,7 +182,7 @@ class EventsByAuditView(APIView):
         execution_time = int((time() - start_time) * 1000)
         services.log_report_query(
             report_type='events_by_audit',
-            filters={},
+            filters=filters,
             execution_time_ms=execution_time,
             user=request.user
         )
@@ -180,8 +206,18 @@ class EvidenceSummaryView(APIView):
     def get(self, request):
         start_time = time()
         
+        # Validar filtros
+        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        if not filter_serializer.is_valid():
+            return Response(
+                filter_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        filters = filter_serializer.validated_data
+        
         # Obtener datos
-        data = services.get_evidence_summary()
+        data = services.get_evidence_summary(filters=filters)
         
         # Serializar respuesta
         serializer = serializers.EvidenceSummarySerializer(data)
@@ -190,7 +226,7 @@ class EvidenceSummaryView(APIView):
         execution_time = int((time() - start_time) * 1000)
         services.log_report_query(
             report_type='evidence_summary',
-            filters={},
+            filters=filters,
             execution_time_ms=execution_time,
             user=request.user
         )
@@ -213,8 +249,18 @@ class EventSummaryView(APIView):
     def get(self, request):
         start_time = time()
         
-        # Obtener datos (últimos 30 días por defecto)
-        data = services.get_event_summary_report(days=30)
+        # Validar filtros
+        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        if not filter_serializer.is_valid():
+            return Response(
+                filter_serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        filters = filter_serializer.validated_data
+        
+        # Obtener datos
+        data = services.get_event_summary_report(filters=filters)
         
         # Serializar respuesta
         serializer = serializers.EventSummaryReportSerializer(data)
@@ -223,7 +269,7 @@ class EventSummaryView(APIView):
         execution_time = int((time() - start_time) * 1000)
         services.log_report_query(
             report_type='event_summary_report',
-            filters={'days': 30},
+            filters=filters,
             execution_time_ms=execution_time,
             user=request.user
         )

@@ -11,21 +11,64 @@ from authentication.models import CustomUser
 from core.services import audit_logger
 
 
-def get_audit_summary():
+def apply_report_filters(queryset, filters, date_field='created_at'):
+    """
+    Aplica filtros comunes de reportería a un queryset.
+    """
+    if not filters:
+        return queryset
+    
+    # Filtros de fecha
+    start_date = filters.get('start_date')
+    if start_date:
+        if isinstance(start_date, str):
+            start_date = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        queryset = queryset.filter(**{f"{date_field}__gte": start_date})
+    
+    end_date = filters.get('end_date')
+    if end_date:
+        if isinstance(end_date, str):
+            end_date = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+        queryset = queryset.filter(**{f"{date_field}__lte": end_date})
+    
+    # Filtro de auditor (usuario asignado)
+    auditor_id = filters.get('auditor') or filters.get('user_id')
+    if auditor_id:
+        # Si es AuditEvent o Evidence, el auditor está en audit__auditor
+        if queryset.model in [AuditEvent, Evidence]:
+            queryset = queryset.filter(audit__auditor_id=auditor_id)
+        else:
+            queryset = queryset.filter(auditor_id=auditor_id)
+            
+    # Filtro de estado
+    status = filters.get('status')
+    if status:
+        if queryset.model in [AuditEvent, Evidence]:
+            queryset = queryset.filter(audit__status=status)
+        else:
+            queryset = queryset.filter(status=status)
+            
+    return queryset
+
+
+def get_audit_summary(filters=None):
     """
     Obtiene resumen general de auditorías.
     
     Returns:
         dict: Diccionario con totales y conteos por estado
     """
-    total = Audit.objects.count()
-    active = Audit.objects.filter(deleted=False).count()
-    deleted = Audit.objects.filter(deleted=True).count()
+    queryset = Audit.objects.all()
+    queryset = apply_report_filters(queryset, filters)
+    
+    total = queryset.count()
+    active = queryset.filter(deleted=False).count()
+    deleted = queryset.filter(deleted=True).count()
     
     by_status = {}
     for status_choice in Audit.Status.choices:
         status_key = status_choice[0]
-        count = Audit.objects.filter(status=status_key, deleted=False).count()
+        count = queryset.filter(status=status_key, deleted=False).count()
         by_status[status_key] = count
     
     return {
@@ -36,30 +79,19 @@ def get_audit_summary():
     }
 
 
-def get_audits_by_period(start_date=None, end_date=None, grouping='monthly'):
+def get_audits_by_period(filters=None):
     """
     Obtiene auditorías agrupadas por período temporal.
-    
-    Args:
-        start_date: Fecha de inicio (datetime o string ISO)
-        end_date: Fecha de fin (datetime o string ISO)
-        grouping: Tipo de agrupación ('daily', 'weekly', 'monthly')
     
     Returns:
         dict: Diccionario con labels y data para gráficos
     """
     queryset = Audit.objects.filter(deleted=False)
     
-    # Aplicar filtros de fecha
-    if start_date:
-        if isinstance(start_date, str):
-            start_date = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
-        queryset = queryset.filter(created_at__gte=start_date)
+    # Aplicar filtros
+    queryset = apply_report_filters(queryset, filters)
     
-    if end_date:
-        if isinstance(end_date, str):
-            end_date = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
-        queryset = queryset.filter(created_at__lte=end_date)
+    grouping = filters.get('grouping', 'monthly') if filters else 'monthly'
     
     # Seleccionar función de truncado según agrupación
     if grouping == 'daily':
@@ -99,7 +131,7 @@ def get_audits_by_period(start_date=None, end_date=None, grouping='monthly'):
     }
 
 
-def get_audits_by_user():
+def get_audits_by_user(filters=None):
     """
     Obtiene productividad por auditor (usuario).
     
@@ -139,7 +171,7 @@ def get_audits_by_user():
     return results
 
 
-def get_events_by_audit():
+def get_events_by_audit(filters=None):
     """
     Obtiene resumen de eventos por auditoría.
     
@@ -148,16 +180,15 @@ def get_events_by_audit():
     """
     now = timezone.now()
     
-    total_events = AuditEvent.objects.filter(deleted=False).count()
-    upcoming_events = AuditEvent.objects.filter(
-        deleted=False,
-        event_date__gte=now
-    ).count()
+    queryset = AuditEvent.objects.filter(deleted=False)
+    queryset = apply_report_filters(queryset, filters, date_field='event_date')
+    
+    total_events = queryset.count()
+    upcoming_events = queryset.filter(event_date__gte=now).count()
     
     # Eventos por auditoría
     by_audit = (
-        AuditEvent.objects
-        .filter(deleted=False)
+        queryset
         .values('audit__id', 'audit__title')
         .annotate(event_count=Count('id'))
         .order_by('-event_count')
@@ -179,19 +210,21 @@ def get_events_by_audit():
     }
 
 
-def get_evidence_summary():
+def get_evidence_summary(filters=None):
     """
     Obtiene resumen de evidencias.
     
     Returns:
         dict: Diccionario con totales por tipo y por auditoría
     """
-    total_evidences = Evidence.objects.filter(deleted=False).count()
+    queryset = Evidence.objects.filter(deleted=False)
+    queryset = apply_report_filters(queryset, filters)
+    
+    total_evidences = queryset.count()
     
     # Evidencias por tipo de archivo
     by_type = (
-        Evidence.objects
-        .filter(deleted=False)
+        queryset
         .values('file_type')
         .annotate(count=Count('id'))
         .order_by('-count')
@@ -201,8 +234,7 @@ def get_evidence_summary():
     
     # Evidencias por auditoría
     by_audit = (
-        Evidence.objects
-        .filter(deleted=False)
+        queryset
         .values('audit__id', 'audit__title')
         .annotate(evidence_count=Count('id'))
         .order_by('-evidence_count')
@@ -224,21 +256,22 @@ def get_evidence_summary():
     }
 
 
-def get_event_summary_report(days=30):
+def get_event_summary_report(filters=None):
     """
     Obtiene reporte resumen de eventos, incluyendo distribución por fecha.
     
-    Args:
-        days: Número de días hacia atrás para analizar (default: 30)
-        
     Returns:
         dict: Totales y desglose por fecha
     """
     queryset = AuditEvent.objects.filter(deleted=False)
+    queryset = apply_report_filters(queryset, filters, date_field='event_date')
+    
     total_events = queryset.count()
     
-    # Calcular fecha de inicio
-    start_date = timezone.now() - timedelta(days=days)
+    # Si no hay filtros de fecha, mostrar últimos 30 días por defecto
+    if not filters or (not filters.get('start_date') and not filters.get('end_date')):
+        start_date = timezone.now() - timedelta(days=30)
+        queryset = queryset.filter(event_date__gte=start_date)
     
     # Agrupar por fecha
     events_by_date = (
@@ -279,12 +312,24 @@ def log_report_query(report_type, filters, execution_time_ms, user=None):
         execution_time_ms: Tiempo de ejecución en milisegundos
         user: Usuario que ejecutó la consulta
     """
+    import uuid
+    # Asegurar que los filtros son serializables (convertir UUIDs a string)
+    serializable_filters = {}
+    if filters:
+        for key, value in filters.items():
+            if isinstance(value, uuid.UUID):
+                serializable_filters[key] = str(value)
+            elif isinstance(value, (datetime, timedelta)):
+                serializable_filters[key] = str(value) # Omitir datetime objects directos si mongo no los quiere o formatear
+            else:
+                serializable_filters[key] = value
+
     audit_logger.log_action(
         collection_name='Report',
         action='QUERY',
         data={
             'report_type': report_type,
-            'filters': filters,
+            'filters': serializable_filters,
             'execution_time_ms': execution_time_ms
         },
         user=user

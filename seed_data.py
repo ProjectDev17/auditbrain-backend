@@ -44,6 +44,20 @@ def get_random_date(start_year=2023, end_year=2025):
     random_seconds = random.randint(0, int(delta.total_seconds()))
     return start + timedelta(seconds=random_seconds)
 
+def get_weighted_recent_date():
+    """Generate dates with higher frequency in recent months for better chart visualization."""
+    now = datetime.now(dt_timezone.utc)
+    # Weight towards recent months (last 24 months)
+    months_ago = random.choices(
+        range(0, 24),
+        weights=[24-i for i in range(24)],  # More weight on recent months
+        k=1
+    )[0]
+    base_date = now - timedelta(days=months_ago * 30)
+    # Add some daily variation
+    day_variation = random.randint(-15, 15)
+    return base_date + timedelta(days=day_variation)
+
 def generate_users(count):
     print(f"Generando {count} usuarios...")
     users = []
@@ -117,7 +131,7 @@ def generate_audits(count, user_ids, audit_type_ids):
             end_date=end_date,
             created_by=creator_id,
             updated_by=creator_id,
-            created_at=get_random_date()
+            created_at=get_weighted_recent_date()
         ))
         
         if len(audits) >= BATCH_SIZE:

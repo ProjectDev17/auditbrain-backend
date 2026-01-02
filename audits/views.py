@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Audit, AuditEvent
+from .models import Audit, AuditEvent, Evidence
 from . import serializers
 from .filters import AuditFilter
 
@@ -17,7 +17,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     queryset = Audit.objects.filter(deleted=False)
     serializer_class = serializers.AuditSerializer
     filterset_class = AuditFilter
-    ordering_fields = ['created_at', 'updated_at', 'status', 'title']
+    ordering_fields = '__all__'
     ordering = ['-created_at']  # Ordenamiento por defecto
     
     def get_serializer_class(self):
@@ -37,6 +37,7 @@ class AuditEventViewSet(viewsets.ModelViewSet):
     Usa nested routes: /api/audits/{audit_id}/events/
     """
     serializer_class = serializers.AuditEventSerializer
+    ordering_fields = '__all__'
     
     def get_queryset(self):
         audit_id = self.kwargs.get('audit_pk')
@@ -58,6 +59,7 @@ class GlobalAuditEventViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = AuditEvent.objects.filter(deleted=False)
     serializer_class = serializers.AuditEventSerializer
+    ordering_fields = '__all__'
 
 
 class EvidenceViewSet(viewsets.ModelViewSet):
@@ -67,6 +69,7 @@ class EvidenceViewSet(viewsets.ModelViewSet):
     Soporta subida de archivos multipart/form-data.
     """
     serializer_class = serializers.EvidenceSerializer
+    ordering_fields = '__all__'
     
     def get_queryset(self):
         audit_id = self.kwargs.get('audit_pk')
@@ -79,3 +82,13 @@ class EvidenceViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         # Soft delete
         instance.delete()
+
+
+class GlobalEvidenceViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet para listar todas las evidencias de auditoría (solo lectura).
+    Ruta: /api/evidences/
+    """
+    queryset = Evidence.objects.filter(deleted=False)
+    serializer_class = serializers.EvidenceSerializer
+    ordering_fields = '__all__'

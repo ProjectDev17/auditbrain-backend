@@ -38,6 +38,7 @@ class Migration(migrations.Migration):
                             ("pending", "Pending"),
                             ("in_progress", "In Progress"),
                             ("completed", "Completed"),
+                            ("planned", "Planned"),
                         ],
                         default="pending",
                         max_length=20,

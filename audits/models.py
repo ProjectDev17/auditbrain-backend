@@ -23,6 +23,7 @@ class Audit(AuditableModel):
         PENDING = 'pending', _('Pending')
         IN_PROGRESS = 'in_progress', _('In Progress')
         COMPLETED = 'completed', _('Completed')
+        PLANNED = 'planned', _('Planned')
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)

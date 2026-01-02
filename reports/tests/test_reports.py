@@ -53,6 +53,11 @@ class ReportAggregationTests(TestCase):
                     title=f'Audit Completed {i}',
                     status=Audit.Status.COMPLETED
                 )
+            for i in range(2):
+                Audit.objects.create(
+                    title=f'Audit Planned {i}',
+                    status=Audit.Status.PLANNED
+                )
             
             # 1 deleted
             deleted_audit = Audit.objects.create(

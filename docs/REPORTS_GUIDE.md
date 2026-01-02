@@ -22,7 +22,8 @@ Esta guía describe cómo consumir los endpoints de reportería para construir d
   "by_status": {
     "pending": 30,
     "in_progress": 50,
-    "completed": 40
+    "completed": 40,
+    "planned": 5
   }
 }
 ```

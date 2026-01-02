@@ -108,7 +108,7 @@ def generate_audit_types():
 def generate_audits(count, user_ids, audit_type_ids):
     print(f"Generando {count} auditorías...")
     audits = []
-    statuses = ['pending', 'in_progress', 'completed']
+    statuses = ['pending', 'in_progress', 'completed', 'planned']
     
     for i in range(count):
         audit_type_name = random.choice(AUDIT_TYPES)

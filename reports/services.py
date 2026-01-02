@@ -224,6 +224,51 @@ def get_evidence_summary():
     }
 
 
+def get_event_summary_report(days=30):
+    """
+    Obtiene reporte resumen de eventos, incluyendo distribución por fecha.
+    
+    Args:
+        days: Número de días hacia atrás para analizar (default: 30)
+        
+    Returns:
+        dict: Totales y desglose por fecha
+    """
+    queryset = AuditEvent.objects.filter(deleted=False)
+    total_events = queryset.count()
+    
+    # Calcular fecha de inicio
+    start_date = timezone.now() - timedelta(days=days)
+    
+    # Agrupar por fecha
+    events_by_date = (
+        queryset
+        .filter(event_date__gte=start_date)
+        .annotate(date=TruncDate('event_date'))
+        .values('date')
+        .annotate(count=Count('id'))
+        .order_by('date')
+    )
+    
+    # Formatear resultados
+    by_date_list = [
+        {
+            'date': item['date'].strftime('%Y-%m-%d'),
+            'count': item['count']
+        }
+        for item in events_by_date
+        if item['date']  # Filtrar posibles nulos
+    ]
+    
+    # Llenar huecos de fechas (opcional, pero recomendado para gráficos)
+    # Por ahora devolvemos solo las fechas con datos para simplificar
+    
+    return {
+        'total_events': total_events,
+        'events_by_date': by_date_list
+    }
+
+
 def log_report_query(report_type, filters, execution_time_ms, user=None):
     """
     Registra una consulta de reportería en MongoDB.

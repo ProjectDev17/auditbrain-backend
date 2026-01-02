@@ -19,4 +19,7 @@ urlpatterns = [
     
     # Resumen de evidencias
     path('evidences/summary/', views.EvidenceSummaryView.as_view(), name='evidence-summary'),
+    
+    # Resumen de eventos
+    path('events/summary/', views.EventSummaryView.as_view(), name='event-summary'),
 ]

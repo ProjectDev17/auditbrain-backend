@@ -196,3 +196,36 @@ class EvidenceSummaryView(APIView):
         )
         
         return Response(serializer.data)
+
+
+class EventSummaryView(APIView):
+    """
+    Endpoint para reporte resumen de eventos.
+    
+    GET /api/reports/events/summary/
+    
+    Retorna:
+    - Total de eventos
+    - Historial de eventos por día (últimos 30 días)
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        start_time = time()
+        
+        # Obtener datos (últimos 30 días por defecto)
+        data = services.get_event_summary_report(days=30)
+        
+        # Serializar respuesta
+        serializer = serializers.EventSummaryReportSerializer(data)
+        
+        # Registrar consulta
+        execution_time = int((time() - start_time) * 1000)
+        services.log_report_query(
+            report_type='event_summary_report',
+            filters={'days': 30},
+            execution_time_ms=execution_time,
+            user=request.user
+        )
+        
+        return Response(serializer.data)

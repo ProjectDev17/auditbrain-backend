@@ -57,6 +57,14 @@ class EvidenceSummarySerializer(serializers.Serializer):
     by_audit = EvidenceByAuditItemSerializer(many=True)
 
 
+class EventSummaryReportSerializer(serializers.Serializer):
+    """Serializer para el reporte de resumen de eventos."""
+    total_events = serializers.IntegerField()
+    events_by_date = serializers.ListField(
+        child=serializers.DictField()
+    )
+
+
 class ReportFilterSerializer(serializers.Serializer):
     """Serializer para validar filtros de reportes."""
     start_date = serializers.DateTimeField(required=False, allow_null=True)

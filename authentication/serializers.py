@@ -14,8 +14,8 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at','created_by', 'updated_at', 'updated_by']
+        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'created_at', 'updated_at', 'created_by', 'updated_by']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'created_by', 'updated_by']
 
     def get_is_auditor(self, obj):
         return obj.groups.filter(name='Auditors').exists()
@@ -37,6 +37,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'is_active': self.user.is_active,
             'created_at': self.user.date_joined,
             'updated_at': self.user.updated_at,
+            'created_by': str(self.user.created_by.id) if self.user.created_by else None,
+            'updated_by': str(self.user.updated_by.id) if self.user.updated_by else None,
         }
         
         return data
@@ -92,8 +94,8 @@ class UserManagementSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'password', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'password', 'created_at', 'updated_at', 'created_by', 'updated_by']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'created_by', 'updated_by']
         extra_kwargs = {
             'email': {'required': True} 
         }

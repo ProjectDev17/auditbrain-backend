@@ -10,7 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "auditbrain.settings")
 django.setup()
 
 from django.contrib.auth import get_user_model
-from audits.models import Audit, AuditEvent, Evidence
+from audits.models import Audit, AuditEvent, Evidence, AuditType
 
 User = get_user_model()
 
@@ -80,21 +80,41 @@ def generate_users(count):
         User.objects.bulk_create(users, ignore_conflicts=True)
         print(f"  Insertado lote final de usuarios.")
 
-def generate_audits(count, user_ids):
+def generate_audit_types():
+    """Create AuditType records from predefined list."""
+    print("Generando tipos de auditoría...")
+    for name in AUDIT_TYPES:
+        AuditType.objects.get_or_create(
+            name=name,
+            defaults={'description': f'Tipo de auditoría: {name}'}
+        )
+    print(f"  Creados {len(AUDIT_TYPES)} tipos de auditoría.")
+    return list(AuditType.objects.values_list('id', flat=True))
+
+def generate_audits(count, user_ids, audit_type_ids):
     print(f"Generando {count} auditorías...")
     audits = []
     statuses = ['pending', 'in_progress', 'completed']
     
     for i in range(count):
-        audit_type = random.choice(AUDIT_TYPES)
+        audit_type_name = random.choice(AUDIT_TYPES)
         dept = random.choice(DEPARTMENTS)
         year = random.choice([2023, 2024, 2025])
         creator_id = str(random.choice(user_ids))
+        auditor_id = random.choice(user_ids)
+        audit_type_id = random.choice(audit_type_ids)
+        
+        start_date = get_random_date(year, year).date()
+        end_date = start_date + timedelta(days=random.randint(7, 60))
         
         audits.append(Audit(
-            title=f"{audit_type} - {dept} {year}",
+            title=f"{audit_type_name} - {dept} {year}",
             description=random.choice(DESCRIPTIONS),
             status=random.choice(statuses),
+            audit_type_id=audit_type_id,
+            auditor_id=auditor_id,
+            start_date=start_date,
+            end_date=end_date,
             created_by=creator_id,
             updated_by=creator_id,
             created_at=get_random_date()
@@ -166,8 +186,11 @@ def run():
     generate_users(TOTAL_RECORDS)
     user_ids = list(User.objects.values_list('id', flat=True))
     
-    # 2. Audits
-    generate_audits(TOTAL_RECORDS, user_ids)
+    # 2. Audit Types
+    audit_type_ids = generate_audit_types()
+    
+    # 3. Audits
+    generate_audits(TOTAL_RECORDS, user_ids, audit_type_ids)
     all_audit_ids = list(Audit.objects.values_list('id', flat=True))
     
     # 3. Events

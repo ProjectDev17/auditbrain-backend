@@ -16,4 +16,4 @@ class AuditFilter(filters.FilterSet):
     
     class Meta:
         model = Audit
-        fields = ['status', 'created_by']
+        fields = ['id', 'status', 'created_by']

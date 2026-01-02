@@ -10,11 +10,12 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     """Serializer para información básica del usuario."""
     is_auditor = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(source='date_joined', read_only=True)
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'date_joined']
-        read_only_fields = ['id', 'date_joined']
+        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at','created_by', 'updated_at', 'updated_by']
 
     def get_is_auditor(self, obj):
         return obj.groups.filter(name='Auditors').exists()
@@ -34,6 +35,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'last_name': self.user.last_name,
             'is_auditor': self.user.groups.filter(name='Auditors').exists(),
             'is_active': self.user.is_active,
+            'created_at': self.user.date_joined,
+            'updated_at': self.user.updated_at,
         }
         
         return data
@@ -85,11 +88,12 @@ class UserManagementSerializer(serializers.ModelSerializer):
     """
     is_auditor = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True, required=False, validators=[validate_password])
+    created_at = serializers.DateTimeField(source='date_joined', read_only=True)
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'password']
-        read_only_fields = ['id']
+        fields = ['id', 'email', 'first_name', 'last_name', 'is_active', 'is_auditor', 'password', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
         extra_kwargs = {
             'email': {'required': True} 
         }

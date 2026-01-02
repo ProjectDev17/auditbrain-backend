@@ -72,6 +72,7 @@ class AuditEvidence(AuditableModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     audit = models.ForeignKey(Audit, on_delete=models.CASCADE, related_name='audit_evidences')
     evidence = models.ForeignKey(Evidence, on_delete=models.CASCADE, related_name='audit_evidences')
+    description = models.CharField(max_length=255, blank=True, null=True, help_text='Descripción del archivo')
 
     class Meta:
         unique_together = ['audit', 'evidence']

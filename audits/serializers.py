@@ -147,7 +147,7 @@ class AuditEvidenceSerializer(serializers.ModelSerializer):
         from .models import AuditEvidence
         model = AuditEvidence
         fields = [
-            'id', 'audit', 'evidence',
+            'id', 'audit', 'evidence', 'description',
             'created_at', 'updated_at',
             'created_by', 'updated_by',
             'deleted'

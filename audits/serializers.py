@@ -1,11 +1,21 @@
 from rest_framework import serializers
-from .models import Audit
+from .models import Audit, AuditType
+
+
+class AuditTypeSerializer(serializers.ModelSerializer):
+    """Serializer para tipos de auditoría."""
+    class Meta:
+        model = AuditType
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'deleted']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'deleted']
+
 
 class AuditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Audit
         fields = [
-            'id', 'title', 'description', 'status', 
+            'id', 'title', 'description', 'status',
+            'audit_type', 'auditor', 'start_date', 'end_date',
             'created_at', 'updated_at', 
             'created_by', 'updated_by', 
             'deleted'

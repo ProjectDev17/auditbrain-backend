@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Audit, AuditEvent, Evidence, AuditEvidence
+from .models import Audit, AuditEvent, Evidence, AuditEvidence, AuditType
 from . import serializers
 from .filters import AuditFilter
 
@@ -105,4 +105,17 @@ class AuditEvidenceViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         # Soft delete
+        instance.delete()
+
+
+class AuditTypeViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para tipos de auditoría.
+    Ruta: /api/audit-types/
+    """
+    queryset = AuditType.objects.filter(deleted=False)
+    serializer_class = serializers.AuditTypeSerializer
+    ordering_fields = '__all__'
+
+    def perform_destroy(self, instance):
         instance.delete()

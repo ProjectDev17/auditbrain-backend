@@ -1,7 +1,22 @@
 import uuid
 from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from core.models import AuditableModel
+
+
+class AuditType(AuditableModel):
+    """Tipo de auditoría."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
 
 class Audit(AuditableModel):
     class Status(models.TextChoices):
@@ -17,6 +32,14 @@ class Audit(AuditableModel):
         choices=Status.choices,
         default=Status.PENDING
     )
+    audit_type = models.ForeignKey(
+        AuditType, on_delete=models.SET_NULL, null=True, blank=True, related_name='audits'
+    )
+    auditor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='audits'
+    )
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.title} ({self.status})"

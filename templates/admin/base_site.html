@@ -1,9 +1,176 @@
 {% extends "admin/base.html" %}
+{% load i18n static %}
 
 {% block title %}AuditBrain Admin{% endblock %}
 
+{% block extrastyle %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* 
+     * AuditBrain Premium Admin Theme 
+     * Injected via base_site.html
+     */
+    :root {
+        --primary-brand: #4f46e5;      /* Indigo 600 */
+        --primary-dark: #4338ca;       /* Indigo 700 */
+        --primary-light: #6366f1;      /* Indigo 500 */
+        --bg-body: #f8fafc;            /* Slate 50 */
+        --bg-surface: #ffffff;
+        --text-main: #0f172a;          /* Slate 900 */
+        --text-muted: #64748b;         /* Slate 500 */
+        --border-color: #e2e8f0;       /* Slate 200 */
+    }
+
+    /* --- Global Resets & Hidden Elements --- */
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        background-color: var(--bg-body) !important;
+        color: var(--text-main) !important;
+        margin: 0 !important;
+    }
+
+    /* Hide Django 4.x Theme Toggle & Skip Links */
+    #header button.theme-toggle, 
+    .theme-toggle,
+    .skip-to-content-link,
+    #nav-sidebar,
+    .toggle-nav-sidebar {
+        display: none !important;
+    }
+
+    /* --- Header Styling --- */
+    #header {
+        background: var(--primary-brand) !important;
+        color: white !important;
+        padding: 0 24px !important;
+        height: 64px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        overflow: hidden !important; /* Contain float issues */
+    }
+
+    /* Branding (Left) */
+    #branding {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: auto !important;
+    }
+
+    #branding h1 {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1.25rem !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #branding h1 a:link, #branding h1 a:visited {
+        color: white !important;
+    }
+
+    /* User Tools (Right) */
+    #user-tools {
+        display: flex !important;
+        align-items: center !important;
+        gap: 20px !important;
+        font-weight: 500 !important;
+        font-size: 0.875rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        text-align: right !important;
+        height: 100%;
+    }
+    
+    #user-tools a {
+        border-bottom: 1px solid transparent;
+    }
+    
+    #user-tools a:hover {
+        border-bottom-color: rgba(255,255,255,0.5);
+    }
+
+    /* Fix generic links in header */
+    #header a:link, #header a:visited {
+        color: white !important;
+    }
+
+    /* --- Breadcrumbs --- */
+    div.breadcrumbs {
+        padding: 16px 24px !important;
+        background: white !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        font-size: 0.875rem !important;
+        color: var(--text-muted) !important;
+        display: flex;
+        align-items: center;
+    }
+    
+    div.breadcrumbs a {
+        color: var(--text-muted) !important;
+    }
+    
+    div.breadcrumbs a:hover {
+        color: var(--primary-brand) !important;
+    }
+
+    /* --- Buttons --- */
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: var(--primary-brand) !important;
+        border-radius: 6px !important;
+        padding: 8px 16px !important;
+        font-weight: 500 !important;
+        text-transform: none !important;
+        transition: all 0.2s !important;
+        border: none !important;
+        color: white !important;
+        cursor: pointer !important;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: var(--primary-dark) !important;
+    }
+    
+    /* Layout Fixes to prevent sidebar overlap */
+    #content {
+        margin-left: 0 !important; 
+    }
+    
+    /* Dashboard specific overrides */
+    .dashboard #content {
+        width: auto !important;
+    }
+
+    /* Tables */
+    table {
+        width: 100% !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    td, th {
+        padding: 12px 20px !important;
+        border-bottom: 1px solid var(--border-color) !important;
+    }
+    
+    th {
+        font-weight: 600 !important;
+        color: var(--text-muted) !important;
+        text-transform: uppercase !important;
+        font-size: 0.75rem !important;
+        background: #f9fafb !important;
+    }
+
+</style>
+{% endblock %}
+
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">AuditBrain Administration</a></h1>
+<h1 id="site-name"><a href="{% url 'admin:index' %}">AuditBrain Admin</a></h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}

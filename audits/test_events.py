@@ -23,18 +23,19 @@ class AuditEventModelTest(TestCase):
         mock_core_user.return_value = self.user.id
         mock_signals_user.return_value = self.user.id
         
-        event_date = datetime.now() + timedelta(days=7)
+        event_date = datetime.now() + timedelta(days==7)
+        
         event = AuditEvent.objects.create(
             audit=self.audit,
-            title='Revisión Inicial',
-            description='Primera revisión de la auditoría',
+            title='Revision Inicial',
+            description='Descripción de la revisión inicial',
             event_date=event_date
         )
         
         self.assertIsNotNone(event.id)
-        self.assertEqual(event.title, 'Revisión Inicial')
         self.assertEqual(event.audit, self.audit)
-        self.assertEqual(event.created_by, self.user.id)
+        self.assertEqual(event.title, 'Test Event')
+        self.assertFalse(event.deleted)
     
     @patch('audits.signals.get_current_user')
     @patch('core.models.get_current_user')

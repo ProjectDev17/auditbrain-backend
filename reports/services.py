@@ -148,35 +148,61 @@ def get_audits_by_period(filters=None):
 def get_audits_by_user(filters=None):
     """
     Obtiene productividad por auditor (usuario).
+    Optimized to avoid N+1 queries using aggregation.
     
     Returns:
         list: Lista de diccionarios con información de cada usuario
     """
-    users = CustomUser.objects.filter(is_active=True)
+    # 1. Agregar conteos por creador (1 query)
+    queryset = Audit.objects.filter(deleted=False)
     
+    # Aplicar filtros si existen (para consistencia con otros reportes)
+    queryset = apply_report_filters(queryset, filters)
+    
+    # Agrupar por created_by (que es el ID del usuario como string)
+    audit_stats = queryset.values('created_by').annotate(
+        created_count=Count('id'),
+        completed_count=Count('id', filter=Q(status=Audit.Status.COMPLETED))
+    )
+    
+    # Crear mapa de estadísticas: {user_id_str: {'created': 10, 'completed': 5}}
+    stats_map = {
+        stat['created_by']: {
+            'created': stat['created_count'],
+            'completed': stat['completed_count']
+        }
+        for stat in audit_stats
+        if stat['created_by']  # Ignorar auditorías sin creador
+    }
+    
+    if not stats_map:
+        return []
+
+    # 2. Obtener detalles de usuarios en lote (1 query)
+    # Solo buscamos usuarios que tengan auditorías en el rango filtrado
+    import uuid
+    valid_uuids = []
+    for uid_str in stats_map.keys():
+        try:
+            uuid.UUID(uid_str)
+            valid_uuids.append(uid_str)
+        except (ValueError, TypeError):
+            continue
+            
+    users = CustomUser.objects.filter(id__in=valid_uuids, is_active=True)
+    
+    # 3. Combinar resultados en memoria
     results = []
     for user in users:
-        user_id_str = str(user.id)
-        
-        created_count = Audit.objects.filter(
-            created_by=user_id_str,
-            deleted=False
-        ).count()
-        
-        completed_count = Audit.objects.filter(
-            created_by=user_id_str,
-            status=Audit.Status.COMPLETED,
-            deleted=False
-        ).count()
-        
-        # Solo incluir usuarios con auditorías
-        if created_count > 0:
+        uid = str(user.id)
+        if uid in stats_map:
+            stats = stats_map[uid]
             results.append({
-                'user_id': str(user.id),
+                'user_id': uid,
                 'user_name': f"{user.first_name} {user.last_name}".strip() or user.email,
                 'user_email': user.email,
-                'created': created_count,
-                'completed': completed_count
+                'created': stats['created'],
+                'completed': stats['completed']
             })
     
     # Ordenar por auditorías creadas (descendente)

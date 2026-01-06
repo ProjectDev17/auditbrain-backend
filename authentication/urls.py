@@ -26,3 +26,13 @@ urlpatterns = [
     path('password/reset/', PasswordResetRequestView.as_view(), name='password_reset'),
     path('password/reset/confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]
+
+from rest_framework.routers import SimpleRouter
+from .views import UserViewSet, GroupViewSet, PermissionViewSet
+
+router = SimpleRouter()
+router.register('users', UserViewSet)
+router.register('groups', GroupViewSet)
+router.register('permissions', PermissionViewSet)
+
+urlpatterns += router.urls

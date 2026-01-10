@@ -14,12 +14,24 @@ class AuditViewSet(viewsets.ModelViewSet):
     Ordenamiento disponible:
     - created_at, updated_at, status, title
     """
-    queryset = Audit.objects.filter(deleted=False)
     serializer_class = serializers.AuditSerializer
     filterset_class = AuditFilter
     ordering_fields = '__all__'
     ordering = ['-created_at']  # Ordenamiento por defecto
     
+    def get_queryset(self):
+        """
+        Optimized queryset with select_related for FKs and prefetch_related for M2M/Reverse FKs.
+        """
+        queryset = Audit.objects.filter(deleted=False).select_related(
+            'audit_type', 'auditor', 'created_by', 'updated_by'
+        )
+        
+        if self.action == 'retrieve':
+            queryset = queryset.prefetch_related('events', 'evidences')
+            
+        return queryset
+
     def get_serializer_class(self):
         """Usar serializer de detalle para retrieve."""
         if self.action == 'retrieve':
@@ -57,7 +69,7 @@ class GlobalAuditEventViewSet(viewsets.ReadOnlyModelViewSet):
     ViewSet para listar todos los eventos de auditoría (solo lectura).
     Ruta: /api/events/
     """
-    queryset = AuditEvent.objects.filter(deleted=False)
+    queryset = AuditEvent.objects.filter(deleted=False).select_related('created_by', 'updated_by')
     serializer_class = serializers.AuditEventSerializer
     ordering_fields = '__all__'
 
@@ -89,7 +101,7 @@ class GlobalEvidenceViewSet(viewsets.ReadOnlyModelViewSet):
     ViewSet para listar todas las evidencias de auditoría (solo lectura).
     Ruta: /api/evidences/
     """
-    queryset = Evidence.objects.filter(deleted=False)
+    queryset = Evidence.objects.filter(deleted=False).select_related('created_by', 'updated_by')
     serializer_class = serializers.EvidenceSerializer
     ordering_fields = '__all__'
 

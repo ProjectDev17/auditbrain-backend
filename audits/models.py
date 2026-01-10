@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -14,8 +15,8 @@ class AuditType(AuditableModel):
     class Meta:
         ordering = ['name']
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return str(self.name)
 
 
 class Audit(AuditableModel):
@@ -31,7 +32,8 @@ class Audit(AuditableModel):
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
-        default=Status.PENDING
+        default=Status.PENDING,
+        db_index=True
     )
     audit_type = models.ForeignKey(
         AuditType, on_delete=models.SET_NULL, null=True, blank=True, related_name='audits'
@@ -42,7 +44,12 @@ class Audit(AuditableModel):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
 
-    def __str__(self):
+    class Meta:
+        indexes = [
+            models.Index(fields=['start_date']),
+        ]
+
+    def __str__(self) -> str:
         return f"{self.title} ({self.status})"
 
 
@@ -60,7 +67,7 @@ class AuditEvent(AuditableModel):
     class Meta:
         ordering = ['event_date']
     
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.title} - {self.event_date.strftime('%Y-%m-%d')}"
 
 
@@ -78,10 +85,10 @@ class Evidence(AuditableModel):
     class Meta:
         ordering = ['-uploaded_at']
     
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Evidence {self.id} - {self.audit.title}"
     
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         # Extraer tipo de archivo del nombre
         if self.file and not self.file_type:
             self.file_type = self.file.name.split('.')[-1].lower()
@@ -102,5 +109,5 @@ class AuditEvidence(AuditableModel):
         unique_together = ['audit', 'evidence']
         ordering = ['-created_at']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Audit {self.audit.title} - Evidence {self.evidence.id}"

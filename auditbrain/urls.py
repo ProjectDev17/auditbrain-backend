@@ -26,6 +26,7 @@ urlpatterns = [
     path("api/", include("audits.urls")),
     path("api/auth/", include("authentication.urls")),
     path("api/reports/", include("reports.urls")),
+    path("mcp/", include("mcp.urls")),
 ]
 
 if settings.DEBUG:

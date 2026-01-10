@@ -1,918 +1,1075 @@
-{
-  "_type": "export",
-  "__export_format": 4,
-  "__export_date": "2025-12-31T20:45:00.000Z",
-  "__export_source": "insomnia.desktop.app:v2023.5.8",
-  "resources": [
-    {
-      "_id": "wrk_auditbrain",
-      "parentId": null,
-      "modified": 1704047560000,
-      "created": 1704047560000,
-      "name": "AuditBrain API - Fase 2",
-      "description": "API REST completa para gesti\u00f3n de auditor\u00edas con eventos y evidencias",
-      "scope": "collection",
-      "_type": "workspace"
-    },
-    {
-      "_id": "env_base",
-      "parentId": "wrk_auditbrain",
-      "modified": 1704047565000,
-      "created": 1704047565000,
-      "name": "Base Environment",
-      "data": {
-        "base_url": "http://localhost:8000",
-        "access_token": "",
-        "refresh_token": "",
-        "audit_id": "",
-        "event_id": "",
-        "evidence_id": "",
-        "audit_type_id": "",
-        "user_id": ""
-      },
-      "dataPropertyOrder": {
-        "&": [
-          "base_url",
-          "access_token",
-          "refresh_token",
-          "audit_id",
-          "event_id",
-          "evidence_id"
-        ]
-      },
-      "color": null,
-      "isPrivate": false,
-      "metaSortKey": 1704047565000,
-      "_type": "environment"
-    },
-    {
-      "_id": "fld_authentication",
-      "parentId": "wrk_auditbrain",
-      "modified": 1735689000000,
-      "created": 1735689000000,
-      "name": "Authentication",
-      "description": "Endpoints para autenticaci\u00f3n JWT y gesti\u00f3n de usuarios",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1735689000000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_login",
-      "parentId": "fld_authentication",
-      "modified": 1735689010000,
-      "created": 1735689010000,
-      "url": "{{ _.base_url }}/api/auth/login/",
-      "name": "Login (Obtain Token)",
-      "description": "Obtener tokens de acceso y refresh mediante email y contrase\u00f1a",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689010000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_refresh_token",
-      "parentId": "fld_authentication",
-      "modified": 1735689020000,
-      "created": 1735689020000,
-      "url": "{{ _.base_url }}/api/auth/token/refresh/",
-      "name": "Refresh Token",
-      "description": "Renovar el token de acceso usando el refresh token",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"refresh\": \"{{ _.refresh_token }}\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689020000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_verify_token",
-      "parentId": "fld_authentication",
-      "modified": 1735689030000,
-      "created": 1735689030000,
-      "url": "{{ _.base_url }}/api/auth/token/verify/",
-      "name": "Verify Token",
-      "description": "Verificar si un token es v\u00e1lido",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"token\": \"{{ _.access_token }}\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689030000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_register",
-      "parentId": "fld_authentication",
-      "modified": 1735689040000,
-      "created": 1735689040000,
-      "url": "{{ _.base_url }}/api/auth/register/",
-      "name": "Register User",
-      "description": "Registrar un nuevo usuario en el sistema",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"password_confirm\": \"SecurePass123!\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"is_auditor\": true,\n  \"created_at\": \"2024-01-01T12:00:00Z\",\n  \"updated_at\": \"2024-01-01T12:00:00Z\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689040000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_get_profile",
-      "parentId": "fld_authentication",
-      "modified": 1735689050000,
-      "created": 1735689050000,
-      "url": "{{ _.base_url }}/api/auth/profile/",
-      "name": "Get User Profile",
-      "description": "Obtener informaci\u00f3n del perfil del usuario autenticado",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689050000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_update_profile",
-      "parentId": "fld_authentication",
-      "modified": 1735689060000,
-      "created": 1735689060000,
-      "url": "{{ _.base_url }}/api/auth/profile/",
-      "name": "Update User Profile",
-      "description": "Actualizar informaci\u00f3n del perfil del usuario",
-      "method": "PATCH",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689060000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_password_reset",
-      "parentId": "fld_authentication",
-      "modified": 1735689070000,
-      "created": 1735689070000,
-      "url": "{{ _.base_url }}/api/auth/password/reset/",
-      "name": "Request Password Reset",
-      "description": "Solicitar recuperaci\u00f3n de contrase\u00f1a por email",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"email\": \"user@example.com\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689070000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_password_reset_confirm",
-      "parentId": "fld_authentication",
-      "modified": 1735689080000,
-      "created": 1735689080000,
-      "url": "{{ _.base_url }}/api/auth/password/reset/confirm/",
-      "name": "Confirm Password Reset",
-      "description": "Confirmar nueva contrase\u00f1a con el token recibido por email",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"token\": \"reset_token_from_email\",\n  \"new_password\": \"NewSecurePass123!\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735689080000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_audits",
-      "parentId": "wrk_auditbrain",
-      "modified": 1704047570000,
-      "created": 1704047570000,
-      "name": "Audits",
-      "description": "Endpoints para gesti\u00f3n de auditor\u00edas",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1704047570000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_list_audits",
-      "parentId": "fld_audits",
-      "modified": 1704047580000,
-      "created": 1704047580000,
-      "url": "{{ _.base_url }}/api/audits",
-      "name": "List Audits",
-      "description": "Obtener lista de auditor\u00edas con paginaci\u00f3n",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047580000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_list_audits_filtered",
-      "parentId": "fld_audits",
-      "modified": 1704047585000,
-      "created": 1704047585000,
-      "url": "{{ _.base_url }}/api/audits?status=pending&ordering=-created_at",
-      "name": "List Audits (Filtered)",
-      "description": "Listar auditor\u00edas con filtros y ordenamiento",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047585000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_create_audit",
-      "parentId": "fld_audits",
-      "modified": 1704047590000,
-      "created": 1704047590000,
-      "url": "{{ _.base_url }}/api/audits",
-      "name": "Create Audit",
-      "description": "Crear una nueva auditor\u00eda",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Auditor\u00eda de Seguridad 2024\",\n  \"description\": \"Revisi\u00f3n semestral de accesos y permisos.\",\n  \"status\": \"pending\",\n  \"audit_type_id\": \"{{ _.audit_type_id }}\",\n  \"auditor_id\": \"{{ _.user_id }}\",\n  \"start_date\": \"2024-01-01\",\n  \"end_date\": \"2024-06-30\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1704047590000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_get_audit",
-      "parentId": "fld_audits",
-      "modified": 1704047600000,
-      "created": 1704047600000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
-      "name": "Get Audit Detail (Extended)",
-      "description": "Obtener detalle con eventos, evidencias e historial",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047600000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_update_audit",
-      "parentId": "fld_audits",
-      "modified": 1704047610000,
-      "created": 1704047610000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
-      "name": "Update Audit",
-      "description": "Actualizar una auditor\u00eda existente",
-      "method": "PATCH",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"status\": \"in_progress\",\n  \"description\": \"Iniciado el proceso de revisi\u00f3n de accesos.\",\n  \"auditor_id\": \"{{ _.user_id }}\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1704047610000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_delete_audit",
-      "parentId": "fld_audits",
-      "modified": 1704047620000,
-      "created": 1704047620000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/",
-      "name": "Delete Audit (Soft)",
-      "description": "Eliminar auditor\u00eda (soft delete)",
-      "method": "DELETE",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047620000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_events",
-      "parentId": "wrk_auditbrain",
-      "modified": 1704047630000,
-      "created": 1704047630000,
-      "name": "Events",
-      "description": "Endpoints para eventos de calendario",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1704047630000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_list_events",
-      "parentId": "fld_events",
-      "modified": 1704047640000,
-      "created": 1704047640000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/",
-      "name": "List Events",
-      "description": "Listar eventos de una auditor\u00eda",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047640000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_create_event",
-      "parentId": "fld_events",
-      "modified": 1704047650000,
-      "created": 1704047650000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/",
-      "name": "Create Event",
-      "description": "Crear evento de calendario",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"title\": \"Revisi\u00f3n Inicial\",\n  \"description\": \"Primera revisi\u00f3n de la auditor\u00eda\",\n  \"event_date\": \"2024-02-15T10:00:00Z\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1704047650000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_delete_event",
-      "parentId": "fld_events",
-      "modified": 1704047660000,
-      "created": 1704047660000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/{{ _.event_id }}/",
-      "name": "Delete Event",
-      "description": "Eliminar evento (soft delete)",
-      "method": "DELETE",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047660000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_evidences",
-      "parentId": "wrk_auditbrain",
-      "modified": 1704047670000,
-      "created": 1704047670000,
-      "name": "Evidences",
-      "description": "Endpoints para evidencias/archivos",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1704047670000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_list_evidences",
-      "parentId": "fld_evidences",
-      "modified": 1704047680000,
-      "created": 1704047680000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/",
-      "name": "List Evidences",
-      "description": "Listar evidencias de una auditor\u00eda",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047680000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_upload_evidence",
-      "parentId": "fld_evidences",
-      "modified": 1704047690000,
-      "created": 1704047690000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/",
-      "name": "Upload Evidence",
-      "description": "Subir archivo de evidencia",
-      "method": "POST",
-      "body": {
-        "mimeType": "multipart/form-data",
-        "params": [
-          {
-            "name": "file",
-            "value": "",
-            "description": "Archivo a subir (PDF, JPG, PNG, DOCX, XLSX, etc.)",
-            "type": "file"
-          }
-        ]
-      },
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047690000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_delete_evidence",
-      "parentId": "fld_evidences",
-      "modified": 1704047700000,
-      "created": 1704047700000,
-      "url": "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/{{ _.evidence_id }}/",
-      "name": "Delete Evidence",
-      "description": "Eliminar evidencia (soft delete)",
-      "method": "DELETE",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1704047700000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_reports",
-      "parentId": "wrk_auditbrain",
-      "modified": 1735700000000,
-      "created": 1735700000000,
-      "name": "Reports",
-      "description": "Endpoints para reporter\u00eda y dashboard",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1735700000000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_audit_summary",
-      "parentId": "fld_reports",
-      "modified": 1735700010000,
-      "created": 1735700010000,
-      "url": "{{ _.base_url }}/api/reports/audits/summary/",
-      "name": "Audit Summary",
-      "description": "Resumen general de auditor\u00edas: totales, por estado, activas vs eliminadas",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735700010000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_audits_by_period",
-      "parentId": "fld_reports",
-      "modified": 1735700020000,
-      "created": 1735700020000,
-      "url": "{{ _.base_url }}/api/reports/audits/by-period/?grouping=monthly",
-      "name": "Audits by Period",
-      "description": "Auditor\u00edas agrupadas por per\u00edodo (daily, weekly, monthly)",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "grouping",
-          "value": "monthly"
-        },
-        {
-          "name": "start_date",
-          "value": "2024-01-01"
-        },
-        {
-          "name": "end_date",
-          "value": "2024-12-31"
-        },
-        {
-          "name": "status",
-          "value": "completed"
-        },
-        {
-          "name": "auditor",
-          "value": "{{ _.user_id }}"
-        }
-      ],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735700020000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_audits_by_user",
-      "parentId": "fld_reports",
-      "modified": 1735700030000,
-      "created": 1735700030000,
-      "url": "{{ _.base_url }}/api/reports/audits/by-user/",
-      "name": "Audits by User",
-      "description": "Productividad por auditor: auditor\u00edas creadas y completadas",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735700030000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_events_by_audit",
-      "parentId": "fld_reports",
-      "modified": 1735700040000,
-      "created": 1735700040000,
-      "url": "{{ _.base_url }}/api/reports/events/by-audit/",
-      "name": "Events by Audit",
-      "description": "Resumen de eventos: totales, pr\u00f3ximos y por auditor\u00eda",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735700040000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_evidence_summary",
-      "parentId": "fld_reports",
-      "modified": 1735700050000,
-      "created": 1735700050000,
-      "url": "{{ _.base_url }}/api/reports/evidences/summary/",
-      "name": "Evidence Summary",
-      "description": "Resumen de evidencias: totales, por tipo y por auditor\u00eda",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735700050000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_list_global_events",
-      "parentId": "fld_events",
-      "modified": 1767304124575,
-      "created": 1767304124575,
-      "url": "{{ _.base_url }}/api/events/",
-      "name": "List Global Events",
-      "description": "Listar todos los eventos de todas las auditor\u00edas",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1767304124575,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_user_mgmt",
-      "parentId": "fld_authentication",
-      "modified": 1767304124575,
-      "created": 1767304124575,
-      "name": "User Management",
-      "description": "CRUD de Usuarios",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1767304124575,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_list_users",
-      "parentId": "fld_user_mgmt",
-      "modified": 1767310673028,
-      "created": 1767304124575,
-      "url": "{{ _.base_url }}/api/users/",
-      "name": "List Users",
-      "description": "Listar usuarios",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1767304124575,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_create_user",
-      "parentId": "fld_user_mgmt",
-      "modified": 1767310673028,
-      "created": 1767304124575,
-      "url": "{{ _.base_url }}/api/users/",
-      "name": "Create User",
-      "description": "Crear usuario (con is_auditor)",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"email\": \"newauditor@example.com\",\n  \"password\": \"pass\",\n  \"first_name\": \"New\",\n  \"last_name\": \"Auditor\",\n  \"is_auditor\": true\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1767304124575,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_get_user",
-      "parentId": "fld_user_mgmt",
-      "modified": 1767310673028,
-      "created": 1767304124575,
-      "url": "{{ _.base_url }}/api/users/{{ _.user_id }}/",
-      "name": "Get User",
-      "description": "Detalle de usuario",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1767304124575,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_update_user",
-      "parentId": "fld_user_mgmt",
-      "modified": 1767310673028,
-      "created": 1767304124575,
-      "url": "{{ _.base_url }}/api/users/{{ _.user_id }}/",
-      "name": "Update User",
-      "description": "Actualizar usuario",
-      "method": "PATCH",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"first_name\": \"Updated\",\n  \"is_auditor\": false\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1767304124575,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_delete_user",
-      "parentId": "fld_user_mgmt",
-      "modified": 1767310673028,
-      "created": 1767304124575,
-      "url": "{{ _.base_url }}/api/users/{{ _.user_id }}/",
-      "name": "Delete User",
-      "description": "Borrado l\u00f3gico de usuario",
-      "method": "DELETE",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1767304124575,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "fld_audit_types",
-      "parentId": "wrk_auditbrain",
-      "modified": 1735701000000,
-      "created": 1735701000000,
-      "name": "Audit Types",
-      "description": "Endpoints para gesti\u00f3n de tipos de auditor\u00eda",
-      "environment": {},
-      "environmentPropertyOrder": null,
-      "metaSortKey": -1735701000000,
-      "_type": "request_group"
-    },
-    {
-      "_id": "req_list_audit_types",
-      "parentId": "fld_audit_types",
-      "modified": 1735701010000,
-      "created": 1735701010000,
-      "url": "{{ _.base_url }}/api/audit-types/",
-      "name": "List Audit Types",
-      "description": "Listar tipos de auditor\u00eda",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735701010000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_create_audit_type",
-      "parentId": "fld_audit_types",
-      "modified": 1735701020000,
-      "created": 1735701020000,
-      "url": "{{ _.base_url }}/api/audit-types/",
-      "name": "Create Audit Type",
-      "description": "Crear tipo de auditor\u00eda",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"name\": \"Seguridad IT\",\n  \"description\": \"Auditor\u00edas enfocadas en infraestructura y accesos.\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735701020000,
-      "isPrivate": false,
-      "_type": "request"
-    },
-    {
-      "_id": "req_event_summary_report",
-      "parentId": "fld_reports",
-      "modified": 1735701030000,
-      "created": 1735701030000,
-      "url": "{{ _.base_url }}/api/reports/events/summary/",
-      "name": "Event Summary Report",
-      "description": "Reporte resumen de eventos con distribuci\u00f3n por fecha",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "start_date",
-          "value": "2024-01-01"
-        },
-        {
-          "name": "end_date",
-          "value": "2024-12-31"
-        }
-      ],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.access_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735701030000,
-      "isPrivate": false,
-      "_type": "request"
-    }
-  ]
-}
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: AuditBrain API - Fase 2
+meta:
+  id: wrk_2f4622e59dae40e7981132d591d17af3
+  created: 1767304216234
+  modified: 1767304216234
+  description: ""
+collection:
+  - name: Audits
+    meta:
+      id: fld_01c1bbf448724c83b3967ad4f51879cc
+      created: 1704047570000
+      modified: 1704047570000
+      sortKey: -1704047570000
+      description: Endpoints para gestión de auditorías
+    children:
+      - url: "{{ _.base_url }}/api/audits"
+        name: List Audits
+        meta:
+          id: req_b46f020b3c374fb49801d6cc772869ca
+          created: 1704047580000
+          modified: 1767672606872
+          isPrivate: false
+          description: Obtener lista de auditorías con paginación
+          sortKey: -1704047580000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits?status=pending&ordering=-created_at"
+        name: List Audits (Filtered)
+        meta:
+          id: req_fbfd34f43ba9422a97adc50b0d48dab6
+          created: 1704047585000
+          modified: 1767672616505
+          isPrivate: false
+          description: Listar auditorías con filtros y ordenamiento
+          sortKey: -1704047585000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits"
+        name: Create Audit
+        meta:
+          id: req_133486f93be04593acdac250bdb4ff88
+          created: 1704047590000
+          modified: 1767672637938
+          isPrivate: false
+          description: Crear una nueva auditoría
+          sortKey: -1704047590000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "Auditoría de Seguridad 2024",
+              "description": "Revisión semestral de accesos y permisos.",
+              "status": "pending"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/"
+        name: Get Audit Detail (Extended)
+        meta:
+          id: req_e9884439abe44e4fa30430bbb5075291
+          created: 1704047600000
+          modified: 1767672627166
+          isPrivate: false
+          description: Obtener detalle con eventos, evidencias e historial
+          sortKey: -1704047600000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/"
+        name: Update Audit
+        meta:
+          id: req_844b9f72d0f045c19c2f9fcc2a687815
+          created: 1704047610000
+          modified: 1767672648379
+          isPrivate: false
+          description: Actualizar una auditoría existente
+          sortKey: -1704047610000
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "status": "in_progress",
+              "description": "Iniciado el proceso de revisión de accesos."
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/"
+        name: Delete Audit (Soft)
+        meta:
+          id: req_6d8f0b2017e141beb0ccb137d59c2d7a
+          created: 1704047620000
+          modified: 1767672655169
+          isPrivate: false
+          description: Eliminar auditoría (soft delete)
+          sortKey: -1704047620000
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Events
+    meta:
+      id: fld_3640fb9983424635abf720ea9c87979d
+      created: 1704047630000
+      modified: 1704047630000
+      sortKey: -1704047630000
+      description: Endpoints para eventos de calendario
+    children:
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/"
+        name: List Events
+        meta:
+          id: req_e6becadbb82d4205ba05b84b153da704
+          created: 1704047640000
+          modified: 1767672763932
+          isPrivate: false
+          description: Listar eventos de una auditoría
+          sortKey: -1704047640000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/"
+        name: Create Event
+        meta:
+          id: req_fcb7ddf74d89407a97cc50c5131e5460
+          created: 1704047650000
+          modified: 1767672778387
+          isPrivate: false
+          description: Crear evento de calendario
+          sortKey: -1704047650000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "Revisión Inicial",
+              "description": "Primera revisión de la auditoría",
+              "event_date": "2024-02-15T10:00:00Z"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/events/{{ _.event_id }}/"
+        name: Delete Event
+        meta:
+          id: req_2a098a5527dc42d6bb1f1458ef61cfa2
+          created: 1704047660000
+          modified: 1767672745552
+          isPrivate: false
+          description: Eliminar evento (soft delete)
+          sortKey: -1704047660000
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/events/"
+        name: List Global Events
+        meta:
+          id: req_21d3e61602914f03bbd81aa6d78c3b1c
+          created: 1767304124575
+          modified: 1767672735029
+          isPrivate: false
+          description: Listar todos los eventos de todas las auditorías
+          sortKey: -1767304124575
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Evidences
+    meta:
+      id: fld_4c68f40b90ad40db859a1c102f4932a0
+      created: 1704047670000
+      modified: 1704047670000
+      sortKey: -1704047670000
+      description: Endpoints para evidencias/archivos
+    children:
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/"
+        name: List Evidences
+        meta:
+          id: req_e1649d1c3e824f4fb21744df1a846370
+          created: 1704047680000
+          modified: 1767672816386
+          isPrivate: false
+          description: Listar evidencias de una auditoría
+          sortKey: -1704047680000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/"
+        name: Upload Evidence
+        meta:
+          id: req_8ceb19e0f7444e5c811b8d4e870cd399
+          created: 1704047690000
+          modified: 1767672826424
+          isPrivate: false
+          description: Subir archivo de evidencia
+          sortKey: -1704047690000
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: file
+              value: ""
+              description: Archivo a subir (PDF, JPG, PNG, DOCX, XLSX, etc.)
+              type: file
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/audits/{{ _.audit_id }}/evidences/{{ _.evidence_id
+          }}/"
+        name: Delete Evidence
+        meta:
+          id: req_84651572ddf249aaa1bda9c38fc4108f
+          created: 1704047700000
+          modified: 1704047700000
+          isPrivate: false
+          description: Eliminar evidencia (soft delete)
+          sortKey: -1704047700000
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Authentication
+    meta:
+      id: fld_b43c9f4d30d14c33b00af78d83dbab14
+      created: 1735689000000
+      modified: 1735689000000
+      sortKey: -1735689000000
+      description: Endpoints para autenticación JWT y gestión de usuarios
+    children:
+      - url: "{{ _.base_url }}/api/auth/login/"
+        name: Login (Obtain Token)
+        meta:
+          id: req_e62f6d15dfa54abba541e99254ede6f8
+          created: 1735689010000
+          modified: 1767670563027
+          isPrivate: false
+          description: Obtener tokens de acceso y refresh mediante email y contraseña
+          sortKey: -1735689010000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "admin@auditbrain.com",
+              "password": "admin123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/token/refresh/"
+        name: Refresh Token
+        meta:
+          id: req_77e8cb0c34d043acac33247109042580
+          created: 1735689020000
+          modified: 1735689020000
+          isPrivate: false
+          description: Renovar el token de acceso usando el refresh token
+          sortKey: -1735689020000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "refresh": "{{ _.refresh_token }}"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/token/verify/"
+        name: Verify Token
+        meta:
+          id: req_19c37f732e6a433c819b5fc145bbd8bb
+          created: 1735689030000
+          modified: 1735689030000
+          isPrivate: false
+          description: Verificar si un token es válido
+          sortKey: -1735689030000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "token": "{{ _.access_token }}"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/register/"
+        name: Register User
+        meta:
+          id: req_d139a264b9d64178bb0874b74b7693da
+          created: 1735689040000
+          modified: 1735689040000
+          isPrivate: false
+          description: Registrar un nuevo usuario en el sistema
+          sortKey: -1735689040000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "newuser@example.com",
+              "password": "SecurePass123!",
+              "password_confirm": "SecurePass123!",
+              "first_name": "John",
+              "last_name": "Doe"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/profile/"
+        name: Get User Profile
+        meta:
+          id: req_65fc13af83d94ed09d6277af35c83b86
+          created: 1735689050000
+          modified: 1735689050000
+          isPrivate: false
+          description: Obtener información del perfil del usuario autenticado
+          sortKey: -1735689050000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/profile/"
+        name: Update User Profile
+        meta:
+          id: req_c351afb6594e4c0d96bbb567393b86e4
+          created: 1735689060000
+          modified: 1735689060000
+          isPrivate: false
+          description: Actualizar información del perfil del usuario
+          sortKey: -1735689060000
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "first_name": "Jane",
+              "last_name": "Smith"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/password/reset/"
+        name: Request Password Reset
+        meta:
+          id: req_8cca1f34508c4f7b91107080cd5fa2e0
+          created: 1735689070000
+          modified: 1735689070000
+          isPrivate: false
+          description: Solicitar recuperación de contraseña por email
+          sortKey: -1735689070000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "user@example.com"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/auth/password/reset/confirm/"
+        name: Confirm Password Reset
+        meta:
+          id: req_8cefccb27fdb4a81b885f9021f37261b
+          created: 1735689080000
+          modified: 1735689080000
+          isPrivate: false
+          description: Confirmar nueva contraseña con el token recibido por email
+          sortKey: -1735689080000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "token": "reset_token_from_email",
+              "new_password": "NewSecurePass123!"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - name: User Management
+        meta:
+          id: fld_4148f6a3be9d49188aa2bdbfa9b2be1f
+          created: 1767304124575
+          modified: 1767304124575
+          sortKey: -1767304124575
+          description: CRUD de Usuarios
+        children:
+          - url: "{{ _.base_url }}/api/auth/users/"
+            name: Create User
+            meta:
+              id: req_06888f46812d4a4281280e76ba27335d
+              created: 1767304124575
+              modified: 1767304124575
+              isPrivate: false
+              description: Crear usuario (con is_auditor)
+              sortKey: -1767304124575
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "email": "newauditor@example.com",
+                  "password": "pass",
+                  "first_name": "New",
+                  "last_name": "Auditor",
+                  "is_auditor": true
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/api/auth/users/{{ _.user_id }}/"
+            name: Update User
+            meta:
+              id: req_95cfd5fb4dd44441ab8fef59ae6c0dae
+              created: 1767304124575
+              modified: 1767304124575
+              isPrivate: false
+              description: Actualizar usuario
+              sortKey: -1767304124575
+            method: PATCH
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                  "first_name": "Updated",
+                  "is_auditor": false
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/api/users/"
+            name: List Users
+            meta:
+              id: req_b185223078f546b0ab652657950a80f9
+              created: 1767304124575
+              modified: 1767304481780
+              isPrivate: false
+              description: Listar usuarios
+              sortKey: -1767304124575
+            method: GET
+            headers:
+              - name: Authorization
+                value: Bearer {{ _.access_token }}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/api/auth/users/{{ _.user_id }}/"
+            name: Delete User
+            meta:
+              id: req_c2d099000d7d4a68b115ac710809a62f
+              created: 1767304124575
+              modified: 1767304124575
+              isPrivate: false
+              description: Borrado lógico de usuario
+              sortKey: -1767304124575
+            method: DELETE
+            headers:
+              - name: Authorization
+                value: Bearer {{ _.access_token }}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/api/auth/users/{{ _.user_id }}/"
+            name: Get User
+            meta:
+              id: req_c52f58bd4e7443ec92de4e178836043a
+              created: 1767304124575
+              modified: 1767304124575
+              isPrivate: false
+              description: Detalle de usuario
+              sortKey: -1767304124575
+            method: GET
+            headers:
+              - name: Authorization
+                value: Bearer {{ _.access_token }}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+  - name: Reports
+    meta:
+      id: fld_d81c4ac0a63642f5b886de5e212601ae
+      created: 1735700000000
+      modified: 1735700000000
+      sortKey: -1735700000000
+      description: Endpoints para reportería y dashboard
+    children:
+      - url: "{{ _.base_url }}/api/reports/audits/summary/"
+        name: Audit Summary
+        meta:
+          id: req_ac15f60dcfe147ee87a896cfd6984375
+          created: 1735700010000
+          modified: 1735700010000
+          isPrivate: false
+          description: "Resumen general de auditorías: totales, por estado, activas vs
+            eliminadas"
+          sortKey: -1735700010000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/reports/audits/by-period/?grouping=monthly"
+        name: Audits by Period
+        meta:
+          id: req_41d838bacfab499f998a784d3f35d376
+          created: 1735700020000
+          modified: 1735700020000
+          isPrivate: false
+          description: Auditorías agrupadas por período (daily, weekly, monthly)
+          sortKey: -1735700020000
+        method: GET
+        parameters:
+          - name: grouping
+            value: monthly
+          - name: start_date
+            value: 2025-01-01T00:00:00Z
+            disabled: true
+          - name: end_date
+            value: 2025-12-31T23:59:59Z
+            disabled: true
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/reports/audits/by-user/"
+        name: Audits by User
+        meta:
+          id: req_bf00c41602b349f281c652b0eda54dc1
+          created: 1735700030000
+          modified: 1735700030000
+          isPrivate: false
+          description: "Productividad por auditor: auditorías creadas y completadas"
+          sortKey: -1735700030000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/reports/events/by-audit/"
+        name: Events by Audit
+        meta:
+          id: req_7f8ca71eea2a430988c9e6481466e871
+          created: 1735700040000
+          modified: 1735700040000
+          isPrivate: false
+          description: "Resumen de eventos: totales, próximos y por auditoría"
+          sortKey: -1735700040000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/reports/evidences/summary/"
+        name: Evidence Summary
+        meta:
+          id: req_083bcff125934edc80aea2b67f2c66bf
+          created: 1735700050000
+          modified: 1735700050000
+          isPrivate: false
+          description: "Resumen de evidencias: totales, por tipo y por auditoría"
+          sortKey: -1735700050000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: MCP (Model Context Protocol)
+    meta:
+      id: fld_mcp_001
+      created: 1736563000000
+      modified: 1736563000000
+      sortKey: -1736563000000
+      description: Endpoints para el protocolo MCP - comunicación con agentes IA
+    children:
+      - url: "{{ _.base_url }}/mcp/"
+        name: MCP Initialize
+        meta:
+          id: req_mcp_init_001
+          created: 1736563010000
+          modified: 1736563010000
+          isPrivate: false
+          description: Inicializar sesión MCP - handshake del protocolo
+          sortKey: -1736563010000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "initialize",
+              "params": {
+                "clientInfo": {
+                  "name": "insomnia-mcp-client",
+                  "version": "1.0.0"
+                }
+              }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/mcp/"
+        name: MCP List Tools
+        meta:
+          id: req_mcp_tools_001
+          created: 1736563020000
+          modified: 1736563020000
+          isPrivate: false
+          description: Listar todos los tools MCP disponibles
+          sortKey: -1736563020000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "tools/list",
+              "params": {}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/mcp/"
+        name: MCP Call Tool - List Audits
+        meta:
+          id: req_mcp_call_list_001
+          created: 1736563030000
+          modified: 1736563030000
+          isPrivate: false
+          description: Ejecutar tool list_audits via MCP
+          sortKey: -1736563030000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "jsonrpc": "2.0",
+              "id": 3,
+              "method": "tools/call",
+              "params": {
+                "name": "list_audits",
+                "arguments": {
+                  "limit": 10,
+                  "status": "pending"
+                }
+              }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/mcp/"
+        name: MCP Call Tool - Create Audit
+        meta:
+          id: req_mcp_call_create_001
+          created: 1736563040000
+          modified: 1736563040000
+          isPrivate: false
+          description: Crear auditoría via MCP tool
+          sortKey: -1736563040000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "jsonrpc": "2.0",
+              "id": 4,
+              "method": "tools/call",
+              "params": {
+                "name": "create_audit",
+                "arguments": {
+                  "title": "Auditoría creada via MCP",
+                  "description": "Esta auditoría fue creada usando el protocolo MCP",
+                  "status": "pending"
+                }
+              }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/mcp/"
+        name: MCP Call Tool - Get Audit
+        meta:
+          id: req_mcp_call_get_001
+          created: 1736563050000
+          modified: 1736563050000
+          isPrivate: false
+          description: Obtener detalle de auditoría via MCP
+          sortKey: -1736563050000
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "jsonrpc": "2.0",
+              "id": 5,
+              "method": "tools/call",
+              "params": {
+                "name": "get_audit",
+                "arguments": {
+                  "audit_id": "{{ _.audit_id }}"
+                }
+              }
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/mcp/discover/"
+        name: MCP Discovery
+        meta:
+          id: req_mcp_discover_001
+          created: 1736563060000
+          modified: 1736563060000
+          isPrivate: false
+          description: Endpoint de discovery para clientes no-MCP
+          sortKey: -1736563060000
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.access_token }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_b7dc53f09cfaabe90dfabf7dd7856cac70b8f299
+    created: 1767304218104
+    modified: 1767304218104
+environments:
+  name: Base Environment
+  meta:
+    id: env_1044458da1884fa79c98b5aa8dd4ad8e
+    created: 1704047565000
+    modified: 1767672790810
+    isPrivate: false
+  data:
+    base_url: http://localhost:8000
+    access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3Njc1NDE0LCJpYXQiOjE3Njc2NzE4MTQsImp0aSI6Ijc1OTBlNmQ1Zjc5ZDQ2ZmE4MTdkODRhMGQyYjI0NDhmIiwidXNlcl9pZCI6ImYxNWJmZWE1LTJkYTEtNDExMC05OTEzLWE5MTYwMmIxMGU1MiJ9.0HzFLqEDtZl9n9TLjrUJgu8rsjALL_m_udOEXo4Uhdc
+    refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2ODI3NjYxNCwiaWF0IjoxNzY3NjcxODE0LCJqdGkiOiI1ZjE0OTUxODBiYWE0NDZhODJhNjliNmJmN2E0N2E0MiIsInVzZXJfaWQiOiJmMTViZmVhNS0yZGExLTQxMTAtOTkxMy1hOTE2MDJiMTBlNTIifQ.m7KZ2X3JNy7jgCg1AEWxouNSa8qfsJmqtOb2_WhM2fg
+    audit_id: b046f522-f5da-427d-ba28-1fe2f19fe9a6
+    event_id: 630d2421-edb7-4390-b80f-3834848aab4a
+    evidence_id: ""
+    user_id: 53387ed6-39cf-4b8a-adb3-ae1e56230418

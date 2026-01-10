@@ -154,3 +154,37 @@ app/
 
 - Usar `django.utils.translation.gettext_lazy as _` para textos traducibles
 - Aplicar en: labels, help_texts, error_messages
+
+---
+
+## Git Workflow
+
+### Ramas
+
+| Rama   | Propósito                   |
+| ------ | --------------------------- |
+| `dev`  | Nuevos desarrollos          |
+| `qa`   | Pruebas y validación        |
+| `main` | Producción (código estable) |
+
+### Flujo
+
+1. **Desarrollo** → Trabajar en `dev`, commits frecuentes
+2. **Testing** → Merge a `qa`, ejecutar tests
+3. **Producción** → Merge a `main` cuando todo esté validado
+
+```bash
+# Nuevo desarrollo
+git checkout dev
+git add .
+git commit -m "feat(module): description"
+
+# Pasar a QA
+git checkout qa
+git merge dev
+python manage.py test
+
+# Si todo pasa, merge a main
+git checkout main
+git merge qa
+```

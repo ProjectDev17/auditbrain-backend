@@ -127,7 +127,7 @@ def process_question(token, question):
     print("\n🤖 Thinking...")
     response = generate_response(question, summary)
     
-    print(f"\n� {response}")
+    print(f"\n💬 {response}")
 
 
 def main():
@@ -169,4 +169,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

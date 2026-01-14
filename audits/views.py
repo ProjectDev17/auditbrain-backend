@@ -24,8 +24,9 @@ class AuditViewSet(viewsets.ModelViewSet):
         Optimized queryset with select_related for FKs and prefetch_related for M2M/Reverse FKs.
         """
         queryset = Audit.objects.filter(deleted=False).select_related(
-            'audit_type', 'auditor', 'created_by', 'updated_by'
+            'audit_type', 'auditor'
         )
+
         
         if self.action == 'retrieve':
             queryset = queryset.prefetch_related('events', 'evidences')
@@ -53,7 +54,11 @@ class AuditEventViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         audit_id = self.kwargs.get('audit_pk')
-        return Audit.objects.get(id=audit_id).events.filter(deleted=False)
+        try:
+            audit = Audit.objects.get(id=audit_id)
+            return audit.events.filter(deleted=False)
+        except Audit.DoesNotExist:
+            return AuditEvent.objects.none()
     
     def perform_create(self, serializer):
         audit_id = self.kwargs.get('audit_pk')
@@ -69,7 +74,8 @@ class GlobalAuditEventViewSet(viewsets.ReadOnlyModelViewSet):
     ViewSet para listar todos los eventos de auditoría (solo lectura).
     Ruta: /api/events/
     """
-    queryset = AuditEvent.objects.filter(deleted=False).select_related('created_by', 'updated_by')
+    queryset = AuditEvent.objects.filter(deleted=False)
+
     serializer_class = serializers.AuditEventSerializer
     ordering_fields = '__all__'
 
@@ -85,7 +91,11 @@ class EvidenceViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         audit_id = self.kwargs.get('audit_pk')
-        return Audit.objects.get(id=audit_id).evidences.filter(deleted=False)
+        try:
+            audit = Audit.objects.get(id=audit_id)
+            return audit.evidences.filter(deleted=False)
+        except Audit.DoesNotExist:
+            return Evidence.objects.none()
     
     def perform_create(self, serializer):
         audit_id = self.kwargs.get('audit_pk')
@@ -101,7 +111,8 @@ class GlobalEvidenceViewSet(viewsets.ReadOnlyModelViewSet):
     ViewSet para listar todas las evidencias de auditoría (solo lectura).
     Ruta: /api/evidences/
     """
-    queryset = Evidence.objects.filter(deleted=False).select_related('created_by', 'updated_by')
+    queryset = Evidence.objects.filter(deleted=False)
+
     serializer_class = serializers.EvidenceSerializer
     ordering_fields = '__all__'
 

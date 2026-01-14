@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.utils import timezone
-from .models import Audit, AuditType
+from .models import Audit, AuditType, AuditEvent, Evidence, AuditEvidence
 import re
 
 
@@ -114,7 +114,7 @@ class AuditEventSerializer(serializers.ModelSerializer):
     """Serializer para eventos de calendario de auditorías."""
     
     class Meta:
-        model = Audit.events.rel.related_model  # AuditEvent
+        model = AuditEvent
         fields = [
             'id', 'title', 'description', 'event_date',
             'created_at', 'created_by', 'updated_at', 'updated_by'
@@ -166,7 +166,7 @@ class EvidenceSerializer(serializers.ModelSerializer):
     MAX_SIZE = 10 * 1024 * 1024  # 10MB
     
     class Meta:
-        model = Audit.evidences.rel.related_model  # Evidence
+        model = Evidence
         fields = [
             'id', 'file', 'file_type', 'uploaded_at',
             'created_by', 'updated_by'

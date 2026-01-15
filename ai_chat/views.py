@@ -196,9 +196,9 @@ class AIConversationViewSet(viewsets.ModelViewSet):
             # Actualizar conversación
             conversation.save()
         
-        # Retornar conversación actualizada
-        serializer = self.get_serializer(conversation)
-        return Response(serializer.data)
+            # Retornar conversación actualizada
+            serializer = self.get_serializer(conversation)
+            return Response(serializer.data)
             
         except Exception as e:
             logger.exception(f"Chat failed: {e}")

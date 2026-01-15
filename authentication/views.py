@@ -35,6 +35,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserManagementSerializer
     permission_classes = [IsAuthenticated] # Ajustar a IsAdminUser si se requiere estricto
     ordering_fields = '__all__'
+    ordering = ['-date_joined']
+
 
     def perform_destroy(self, instance):
         # Soft Delete: Desactivar usuario en lugar de borrar
@@ -50,6 +52,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [IsAuthenticated]
     ordering_fields = '__all__'
+    ordering = ['-id']
+
 
 
 class PermissionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -60,6 +64,8 @@ class PermissionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PermissionSerializer
     permission_classes = [IsAuthenticated]
     ordering_fields = '__all__'
+    ordering = ['-id']
+
 
 
 class RegisterView(generics.CreateAPIView):

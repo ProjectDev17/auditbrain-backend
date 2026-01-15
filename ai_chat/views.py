@@ -131,26 +131,9 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 assistant_message = response.get('message', {}).get('content', '')
                 tool_calls = response.get('message', {}).get('tool_calls')
                 
-                # Si hay tool calls, ejecutarlos
-                if tool_calls:
-                    tool_results = []
-                    for tool_call in tool_calls:
-                        tool_name = tool_call['function']['name']
-                        tool_args = tool_call['function']['arguments']
-                        
-                        try:
-                            result = execute_mcp_tool(tool_name, tool_args, request.user)
-                            formatted_result = format_tool_result_for_chat(tool_name, result)
-                            tool_results.append(formatted_result)
-                        except Exception as e:
-                            logger.error(f"Tool execution failed: {e}")
-                            tool_results.append(f"Error ejecutando {tool_name}: {str(e)}")
-                    
-                    # Agregar resultados al mensaje
-                    if tool_results:
-                        assistant_message += "\n\n" + "\n\n".join(tool_results)
-                
-                # Guardar respuesta del asistente
+            # Si hay tool calls, ejecutarlos y pedir respuesta final
+            if tool_calls:
+                # 1. Guardar mensaje del asistente con las llamadas a herramientas
                 AIMessage.objects.create(
                     conversation=conversation,
                     role='assistant',
@@ -158,12 +141,64 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                     tool_calls=tool_calls
                 )
                 
-                # Actualizar conversación
-                conversation.save()
+                # 2. Ejecutar herramientas y preparar mensajes de resultados
+                current_messages = ollama_service.format_messages_for_ollama(
+                    conversation.messages.all()
+                )
+                
+                for tool_call in tool_calls:
+                    tool_name = tool_call['function']['name']
+                    tool_args = tool_call['function']['arguments']
+                    
+                    try:
+                        result = execute_mcp_tool(tool_name, tool_args, request.user)
+                        # Guardar resultado como mensaje de sistema o rol 'tool'
+                        # Nota: Ollama usa el historial para entender el flujo
+                        AIMessage.objects.create(
+                            conversation=conversation,
+                            role='system', # O 'tool' si el modelo lo soporta, usamos system para contexto
+                            content=f"Resultado de {tool_name}: {json.dumps(result, ensure_ascii=False)}"
+                        )
+                    except Exception as e:
+                        logger.error(f"Tool execution failed: {e}")
+                        AIMessage.objects.create(
+                            conversation=conversation,
+                            role='system',
+                            content=f"Error ejecutando {tool_name}: {str(e)}"
+                        )
+                
+                # 3. Segunda llamada a Ollama para respuesta final en lenguaje natural
+                final_messages = ollama_service.format_messages_for_ollama(
+                    conversation.messages.all()
+                )
+                
+                final_response = ollama_service.chat(
+                    messages=final_messages,
+                    stream=False
+                )
+                
+                final_content = final_response.get('message', {}).get('content', '')
+                
+                # 4. Guardar respuesta final
+                AIMessage.objects.create(
+                    conversation=conversation,
+                    role='assistant',
+                    content=final_content
+                )
+            else:
+                # Si no hubo tool calls, guardar la respuesta única
+                AIMessage.objects.create(
+                    conversation=conversation,
+                    role='assistant',
+                    content=assistant_message
+                )
             
-            # Retornar conversación actualizada
-            serializer = self.get_serializer(conversation)
-            return Response(serializer.data)
+            # Actualizar conversación
+            conversation.save()
+        
+        # Retornar conversación actualizada
+        serializer = self.get_serializer(conversation)
+        return Response(serializer.data)
             
         except Exception as e:
             logger.exception(f"Chat failed: {e}")

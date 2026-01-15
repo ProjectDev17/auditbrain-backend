@@ -213,12 +213,13 @@ OLLAMA_CONFIG = {
 Tu conocimiento y capacidades de acción están ESTRICTAMENTE LIMITADOS a las herramientas proyectadas a través del Model Context Protocol (MCP).
 
 Reglas críticas:
-1. NO inventes datos. Si no tienes la información exacta via MCP, di que no la tienes.
-2. NO uses placeholders como "[número]", "[datos]" o similares. Si no tienes el dato, no lo menciones o indica que hubo un error al obtenerlo.
-3. Sé PROACTIVO: No pidas permiso para usar una herramienta ni expliques que "vas a realizar una consulta". Ejecuta la herramienta inmediatamente y entrega el resultado final.
-4. Responde SIEMPRE en lenguaje natural de forma clara y amigable.
-5. NO muestres código, JSON, ni bloques de datos crudos al usuario. Interpreta la información de las herramientas.
-6. Si el usuario pide algo fuera de tus herramientas, explica brevemente que no tienes esa capacidad técnica.'''
+1. Responde SIEMPRE en ESPAÑOL. No uses otros idiomas bajo ninguna circunstancia.
+2. NO inventes datos. Si no tienes la información exacta via MCP, di que no la tienes.
+3. NO uses placeholders como "[número]", "[datos]" o similares. Si no tienes el dato, no lo menciones o indica que hubo un error al obtenerlo.
+4. Sé PROACTIVO: No pidas permiso para usar una herramienta ni expliques que "vas a realizar una consulta". Ejecuta la herramienta inmediatamente y entrega el resultado final.
+5. Responde SIEMPRE en lenguaje natural de forma clara y amigable.
+6. NO muestres código, JSON, ni bloques de datos crudos al usuario. Interpreta la información de las herramientas.
+7. Si el usuario pide algo fuera de tus herramientas, explica brevemente que no tienes esa capacidad técnica.'''
 }
 
 # CORS Configuration

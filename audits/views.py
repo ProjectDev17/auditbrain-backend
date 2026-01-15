@@ -69,15 +69,20 @@ class AuditEventViewSet(viewsets.ModelViewSet):
         instance.delete()
 
 
-class GlobalAuditEventViewSet(viewsets.ReadOnlyModelViewSet):
+class GlobalAuditEventViewSet(viewsets.ModelViewSet):
     """
-    ViewSet para listar todos los eventos de auditoría (solo lectura).
+    ViewSet para listar y gestionar todos los eventos de auditoría.
     Ruta: /api/events/
+    Soporta: GET, POST, PUT, PATCH, DELETE
     """
     queryset = AuditEvent.objects.filter(deleted=False)
-
     serializer_class = serializers.AuditEventSerializer
     ordering_fields = '__all__'
+    
+    def perform_destroy(self, instance):
+        # Soft delete
+        instance.delete()
+
 
 
 class EvidenceViewSet(viewsets.ModelViewSet):
@@ -106,15 +111,20 @@ class EvidenceViewSet(viewsets.ModelViewSet):
         instance.delete()
 
 
-class GlobalEvidenceViewSet(viewsets.ReadOnlyModelViewSet):
+class GlobalEvidenceViewSet(viewsets.ModelViewSet):
     """
-    ViewSet para listar todas las evidencias de auditoría (solo lectura).
+    ViewSet para listar y gestionar todas las evidencias de auditoría.
     Ruta: /api/evidences/
+    Soporta: GET, POST, PUT, PATCH, DELETE
     """
     queryset = Evidence.objects.filter(deleted=False)
-
     serializer_class = serializers.EvidenceSerializer
     ordering_fields = '__all__'
+    
+    def perform_destroy(self, instance):
+        # Soft delete
+        instance.delete()
+
 
 
 class AuditEvidenceViewSet(viewsets.ModelViewSet):

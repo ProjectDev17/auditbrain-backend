@@ -33,7 +33,7 @@ class AuditEventAdmin(admin.ModelAdmin):
 
 @admin.register(Evidence)
 class EvidenceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'audit', 'file_type', 'uploaded_at', 'created_by')
+    list_display = ('id', 'title', 'audit', 'file_type', 'file_size', 'uploaded_at', 'created_by')
     list_filter = ('file_type', 'uploaded_at')
     search_fields = ('title', 'description', 'audit__title')
-    readonly_fields = ('id', 'file_type', 'uploaded_at', 'created_by', 'updated_by')
+    readonly_fields = ('id', 'file_type', 'file_size', 'uploaded_at', 'created_by', 'updated_by')

@@ -111,6 +111,7 @@ class Evidence(AuditableModel):
     description = models.TextField(blank=True, null=True)
     file = models.FileField(upload_to='evidences/%Y/%m/%d/')
     file_type = models.CharField(max_length=50)
+    file_size = models.PositiveIntegerField(null=True, blank=True, help_text="Tamaño del archivo en bytes")
     uploaded_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -121,8 +122,17 @@ class Evidence(AuditableModel):
     
     def save(self, *args, **kwargs) -> None:
         # Extraer tipo de archivo del nombre
-        if self.file and not self.file_type:
-            self.file_type = self.file.name.split('.')[-1].lower()
+        if self.file:
+            if not self.file_type:
+                self.file_type = self.file.name.split('.')[-1].lower()
+            
+            # Calcular tamaño si no está set y el archivo es accesible
+            if not self.file_size:
+                try:
+                    self.file_size = self.file.size
+                except Exception:
+                    pass
+                    
         super().save(*args, **kwargs)
 
 

@@ -183,11 +183,11 @@ class EvidenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evidence
         fields = [
-            'id', 'audit', 'title', 'description', 'file', 'file_type', 'uploaded_at',
+            'id', 'audit', 'title', 'description', 'file', 'file_type', 'file_size', 'uploaded_at',
             'created_at', 'created_by', 'updated_at', 'updated_by'
         ]
         read_only_fields = [
-            'id', 'file_type', 'uploaded_at', 
+            'id', 'file_type', 'file_size', 'uploaded_at', 
             'created_at', 'created_by', 'updated_at', 'updated_by'
         ]
     

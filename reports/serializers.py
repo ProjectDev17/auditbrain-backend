@@ -70,7 +70,11 @@ class ReportFilterSerializer(serializers.Serializer):
     start_date = serializers.DateField(required=False, allow_null=True)
     end_date = serializers.DateField(required=False, allow_null=True)
     user_id = serializers.UUIDField(required=False, allow_null=True)
-    auditor = serializers.UUIDField(required=False, allow_null=True)
+    auditor = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False,
+        allow_null=True
+    )
     status = serializers.ChoiceField(
         choices=['pending', 'in_progress', 'completed'],
         required=False,

@@ -46,13 +46,19 @@ def apply_report_filters(queryset, filters, date_field='created_at'):
         queryset = queryset.filter(**{f"{date_field}__lte": end_date})
     
     # Filtro de auditor (usuario asignado)
-    auditor_id = filters.get('auditor') or filters.get('user_id')
-    if auditor_id:
+    # Soporta lista de IDs o un solo ID
+    auditor_ids = filters.get('auditor') or filters.get('user_id')
+    
+    if auditor_ids:
+        # Asegurar que sea una lista
+        if not isinstance(auditor_ids, list):
+            auditor_ids = [auditor_ids]
+            
         # Si es AuditEvent o Evidence, el auditor está en audit__auditor
         if queryset.model in [AuditEvent, Evidence]:
-            queryset = queryset.filter(audit__auditor_id=auditor_id)
+            queryset = queryset.filter(audit__auditor_id__in=auditor_ids)
         else:
-            queryset = queryset.filter(auditor_id=auditor_id)
+            queryset = queryset.filter(auditor_id__in=auditor_ids)
             
     # Filtro de estado
     status = filters.get('status')
@@ -306,10 +312,11 @@ def get_event_summary_report(filters=None):
     """
     queryset = AuditEvent.objects.filter(deleted=False)
     
-    # Si no hay filtros de fecha, mostrar últimos 30 días por defecto
-    if not filters or (not filters.get('start_date') and not filters.get('end_date')):
-        default_start = timezone.now() - dt.timedelta(days=30)
-        queryset = queryset.filter(occurred_at__gte=default_start)
+    # Si no hay filtros de fecha, no aplicar filtro por defecto (traer histórico completo)
+    # Anteriormente filtraba ultimos 30 dias:
+    # if not filters or (not filters.get('start_date') and not filters.get('end_date')):
+    #     default_start = timezone.now() - dt.timedelta(days=30)
+    #     queryset = queryset.filter(occurred_at__gte=default_start)
     
     # Aplicar filtros adicionales de la request
     queryset = apply_report_filters(queryset, filters, date_field='occurred_at')

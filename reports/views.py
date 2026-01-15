@@ -12,6 +12,31 @@ from time import time
 from . import services
 from . import serializers
 
+def _get_report_filters(request):
+    """
+    Helper para extraer y validar filtros de reportes.
+    Maneja correctamente listas en query parameters (como ?auditor=1&auditor=2).
+    """
+    # Copiar params a un dict mutable
+    data = request.query_params.dict()
+    
+    # Manejo de filtro CSV style (?auditor_in=1,2) O params repetidos (?auditor_in=1&auditor_in=2)
+    if 'auditor_in' in request.query_params:
+        raw_list = request.query_params.getlist('auditor_in')
+        auditor_ids = []
+        for item in raw_list:
+            # Soporta items mezclados tipo ["1,2", "3"]
+            auditor_ids.extend(item.split(','))
+        
+        # Eliminar vacíos y espacios
+        data['auditor'] = [aid.strip() for aid in auditor_ids if aid.strip()]
+        
+    # Manejo legacy fallback (?auditor=id1&auditor=id2)
+    elif 'auditor' in request.query_params:
+        data['auditor'] = request.query_params.getlist('auditor')
+        
+    return serializers.ReportFilterSerializer(data=data)
+
 
 class AuditSummaryView(APIView):
     """
@@ -30,7 +55,7 @@ class AuditSummaryView(APIView):
         start_time = time()
         
         # Validar filtros
-        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        filter_serializer = _get_report_filters(request)
         if not filter_serializer.is_valid():
             return Response(
                 filter_serializer.errors,
@@ -76,7 +101,7 @@ class AuditByPeriodView(APIView):
         start_time = time()
         
         # Validar filtros
-        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        filter_serializer = _get_report_filters(request)
         if not filter_serializer.is_valid():
             return Response(
                 filter_serializer.errors,
@@ -119,7 +144,7 @@ class AuditByUserView(APIView):
         start_time = time()
         
         # Validar filtros
-        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        filter_serializer = _get_report_filters(request)
         if not filter_serializer.is_valid():
             return Response(
                 filter_serializer.errors,
@@ -163,7 +188,7 @@ class EventsByAuditView(APIView):
         start_time = time()
         
         # Validar filtros
-        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        filter_serializer = _get_report_filters(request)
         if not filter_serializer.is_valid():
             return Response(
                 filter_serializer.errors,
@@ -207,7 +232,7 @@ class EvidenceSummaryView(APIView):
         start_time = time()
         
         # Validar filtros
-        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        filter_serializer = _get_report_filters(request)
         if not filter_serializer.is_valid():
             return Response(
                 filter_serializer.errors,
@@ -250,7 +275,7 @@ class EventSummaryView(APIView):
         start_time = time()
         
         # Validar filtros
-        filter_serializer = serializers.ReportFilterSerializer(data=request.query_params)
+        filter_serializer = _get_report_filters(request)
         if not filter_serializer.is_valid():
             return Response(
                 filter_serializer.errors,

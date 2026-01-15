@@ -155,7 +155,7 @@ class AuditEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuditEvent
         fields = [
-            'id', 'title', 'description', 
+            'id', 'audit', 'title', 'description', 
             'event_type', 'severity', 'occurred_at',
             'created_at', 'created_by', 'updated_at', 'updated_by'
         ]

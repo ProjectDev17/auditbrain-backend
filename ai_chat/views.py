@@ -230,38 +230,100 @@ class AIConversationViewSet(viewsets.ModelViewSet):
         def event_stream():
             """Generador para Server-Sent Events."""
             try:
-                # Guardar mensaje del usuario
+                # 1. Guardar mensaje del usuario
                 AIMessage.objects.create(
                     conversation=conversation,
                     role='user',
                     content=user_message
                 )
                 
-                # Preparar mensajes
+                # 2. Primer paso: Llamar a Ollama (puede o no usar tools)
                 messages = ollama_service.format_messages_for_ollama(
                     conversation.messages.all()
                 )
                 
-                # Obtener tools si está habilitado
                 tools = None
                 if enable_tools:
                     tools = get_audit_context_tools()
                 
-                # Stream de Ollama
                 full_response = ""
-                for chunk in ollama_service.chat(messages=messages, tools=tools, stream=True):
-                    full_response += chunk
-                    # Enviar chunk como SSE
-                    yield f"data: {json.dumps({'content': chunk}, ensure_ascii=False)}\n\n"
+                all_tool_calls = []
                 
-                # Guardar respuesta completa
-                AIMessage.objects.create(
-                    conversation=conversation,
-                    role='assistant',
-                    content=full_response
-                )
+                # Procesar primer stream
+                for chunk_dict in ollama_service.chat(messages=messages, tools=tools, stream=True):
+                    content = chunk_dict.get('content')
+                    tool_calls = chunk_dict.get('tool_calls')
+                    
+                    if content:
+                        full_response += content
+                        # Enviar texto al usuario solo si no hay intención de tools detectada aún
+                        # (O si el modelo decide enviar texto Y tools, aunque Ollama suele separar).
+                        yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                    
+                    if tool_calls:
+                        all_tool_calls.extend(tool_calls)
                 
-                # Actualizar conversación
+                # 3. Si hubo tool calls, ejecutarlas y hacer un segundo paso
+                if all_tool_calls:
+                    # Guardar el mensaje del asistente con las tools
+                    AIMessage.objects.create(
+                        conversation=conversation,
+                        role='assistant',
+                        content=full_response,
+                        tool_calls=all_tool_calls
+                    )
+                    
+                    # Ejecutar cada herramienta
+                    for tool_call in all_tool_calls:
+                        tool_name = tool_call['function']['name']
+                        tool_args = tool_call['function']['arguments']
+                        
+                        try:
+                            result = execute_mcp_tool(tool_name, tool_args, request.user)
+                            AIMessage.objects.create(
+                                conversation=conversation,
+                                role='system',
+                                content=f"Resultado de {tool_name}: {json.dumps(result, ensure_ascii=False)}"
+                            )
+                        except Exception as e:
+                            logger.error(f"Tool execution failed in stream: {e}")
+                            AIMessage.objects.create(
+                                conversation=conversation,
+                                role='system',
+                                content=f"Error ejecutando {tool_name}: {str(e)}"
+                            )
+                    
+                    # Segundo paso: Stream de la interpretación en lenguaje natural
+                    final_messages = ollama_service.format_messages_for_ollama(
+                        conversation.messages.all()
+                    )
+                    
+                    # Informar al frontend que estamos procesando (opcional, pero ayuda a la UX)
+                    # yield f"data: {json.dumps({'status': 'interpreting'}, ensure_ascii=False)}\n\n"
+                    
+                    interpretation_response = ""
+                    for chunk_dict in ollama_service.chat(messages=final_messages, stream=True):
+                        content = chunk_dict.get('content')
+                        if content:
+                            interpretation_response += content
+                            yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                    
+                    # Guardar respuesta final interpretada
+                    AIMessage.objects.create(
+                        conversation=conversation,
+                        role='assistant',
+                        content=interpretation_response
+                    )
+                    
+                else:
+                    # Si no hubo tools, solo guardar la respuesta inicial completa
+                    AIMessage.objects.create(
+                        conversation=conversation,
+                        role='assistant',
+                        content=full_response
+                    )
+                
+                # Actualizar timestamp de conversación
                 conversation.save()
                 
                 # Enviar evento de finalización

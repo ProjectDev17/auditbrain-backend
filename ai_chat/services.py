@@ -82,10 +82,15 @@ class OllamaService:
                             chunk = json.loads(line)
                             
                             # Ollama envía el contenido en chunk['message']['content']
-                            if 'message' in chunk and 'content' in chunk['message']:
-                                content = chunk['message']['content']
-                                if content:
-                                    yield content
+                            message = chunk.get('message', {})
+                            content = message.get('content')
+                            tool_calls = message.get('tool_calls')
+                            
+                            if content or tool_calls:
+                                yield {
+                                    'content': content,
+                                    'tool_calls': tool_calls
+                                }
                             
                             # Si el chunk indica que terminó
                             if chunk.get('done', False):

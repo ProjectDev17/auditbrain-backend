@@ -91,13 +91,20 @@ class AuditSerializer(serializers.ModelSerializer):
 
         # 4. Validar Duplicados (Mismo Título + Tipo + Activa)
         title = data.get('title')
-        if title and audit_type:
-            # Excluir la instancia actual si es edición
+        audit_type_val = data.get('audit_type')
+        
+        # Si es edición, completar datos faltantes con la instancia actual
+        if self.instance:
+            title = title or self.instance.title
+            audit_type_val = audit_type_val or self.instance.audit_type
+
+        if title and audit_type_val:
             qs = Audit.objects.filter(
                 title__iexact=title, 
-                audit_type=audit_type, 
+                audit_type=audit_type_val, 
                 deleted=False
             )
+            
             if self.instance:
                 qs = qs.exclude(id=self.instance.id)
             

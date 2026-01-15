@@ -107,6 +107,8 @@ class Evidence(AuditableModel):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     audit = models.ForeignKey(Audit, on_delete=models.CASCADE, related_name='evidences')
+    title = models.CharField(max_length=255, default="Evidencia sin título")
+    description = models.TextField(blank=True, null=True)
     file = models.FileField(upload_to='evidences/%Y/%m/%d/')
     file_type = models.CharField(max_length=50)
     uploaded_at = models.DateTimeField(auto_now_add=True)

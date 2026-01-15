@@ -152,18 +152,17 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                     
                     try:
                         result = execute_mcp_tool(tool_name, tool_args, request.user)
-                        # Guardar resultado como mensaje de sistema o rol 'tool'
-                        # Nota: Ollama usa el historial para entender el flujo
+                        # Guardar resultado como rol 'tool'
                         AIMessage.objects.create(
                             conversation=conversation,
-                            role='system', # O 'tool' si el modelo lo soporta, usamos system para contexto
+                            role='tool',
                             content=f"Resultado de {tool_name}: {json.dumps(result, ensure_ascii=False)}"
                         )
                     except Exception as e:
                         logger.error(f"Tool execution failed: {e}")
                         AIMessage.objects.create(
                             conversation=conversation,
-                            role='system',
+                            role='tool',
                             content=f"Error ejecutando {tool_name}: {str(e)}"
                         )
                 
@@ -282,14 +281,14 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                             result = execute_mcp_tool(tool_name, tool_args, request.user)
                             AIMessage.objects.create(
                                 conversation=conversation,
-                                role='system',
+                                role='tool',
                                 content=f"Resultado de {tool_name}: {json.dumps(result, ensure_ascii=False)}"
                             )
                         except Exception as e:
                             logger.error(f"Tool execution failed in stream: {e}")
                             AIMessage.objects.create(
                                 conversation=conversation,
-                                role='system',
+                                role='tool',
                                 content=f"Error ejecutando {tool_name}: {str(e)}"
                             )
                     

@@ -32,6 +32,7 @@ class AIMessage(models.Model):
         USER = 'user', 'User'
         ASSISTANT = 'assistant', 'Assistant'
         SYSTEM = 'system', 'System'
+        TOOL = 'tool', 'Tool'
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversation = models.ForeignKey(

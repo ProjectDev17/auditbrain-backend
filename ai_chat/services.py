@@ -130,8 +130,13 @@ class OllamaService:
         
         # Agregar mensajes de la conversación
         for msg in conversation_messages:
+            # Asegurar que el rol sea uno de los soportados por Ollama 
+            # (user, assistant, system, tool).
+            role = msg.role
+            # Validar que si es tool, Ollama reciba los campos necesarios 
+            # (aunque aquí solo enviamos content).
             messages.append({
-                "role": msg.role,
+                "role": role,
                 "content": msg.content
             })
         

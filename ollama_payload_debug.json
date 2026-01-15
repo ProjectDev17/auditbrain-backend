@@ -1,0 +1,196 @@
+{
+  "model": "qwen2.5:7b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Eres un asistente especializado en auditor\u00edas para AuditBrain.\nTienes acceso a las auditor\u00edas del usuario y puedes ayudar con:\n- Consultas sobre el estado de auditor\u00edas\n- Creaci\u00f3n de nuevas auditor\u00edas\n- An\u00e1lisis de eventos y evidencias\n- Generaci\u00f3n de reportes\n\nResponde de forma concisa y profesional. Si necesitas informaci\u00f3n espec\u00edfica,\nusa las herramientas disponibles para consultar la base de datos."
+    },
+    {
+      "role": "user",
+      "content": "Cuenta del 1 al 5 lentamente"
+    },
+    {
+      "role": "assistant",
+      "content": "Entendido. Estoy listo para ayudarte con tus auditor\u00edas en AuditBrain. \u00bfPuedes indicarme cu\u00e1l es tu pr\u00f3ximo paso o qu\u00e9 informaci\u00f3n precisa necesitas?"
+    }
+  ],
+  "stream": false,
+  "options": {
+    "temperature": 0.7,
+    "num_predict": 2000
+  },
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "list_audits",
+        "description": "List all audits with optional filters. Returns audit records including title, status, dates and metadata.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "in_progress",
+                "completed",
+                "planned"
+              ],
+              "description": "Filter by audit status"
+            },
+            "limit": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Maximum number of audits to return"
+            },
+            "offset": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "description": "Number of audits to skip for pagination"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_audit",
+        "description": "Get detailed information about a specific audit by ID, including events and evidences.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "audit_id"
+          ],
+          "properties": {
+            "audit_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the audit to retrieve"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_audit",
+        "description": "Create a new audit record with the specified title and description.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "title"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 255,
+              "description": "Title of the audit"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description of the audit"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "in_progress",
+                "completed",
+                "planned"
+              ],
+              "default": "pending",
+              "description": "Initial status of the audit"
+            },
+            "start_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Start date (YYYY-MM-DD)"
+            },
+            "end_date": {
+              "type": "string",
+              "format": "date",
+              "description": "End date (YYYY-MM-DD)"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "update_audit",
+        "description": "Update an existing audit's properties.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "audit_id"
+          ],
+          "properties": {
+            "audit_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the audit to update"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 255,
+              "description": "New title"
+            },
+            "description": {
+              "type": "string",
+              "description": "New description"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "in_progress",
+                "completed",
+                "planned"
+              ],
+              "description": "New status"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "delete_audit",
+        "description": "Soft delete an audit (marks as deleted, does not remove from database).",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "audit_id"
+          ],
+          "properties": {
+            "audit_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID of the audit to delete"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "list_audit_types",
+        "description": "List all available audit types.",
+        "parameters": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    }
+  ]
+}

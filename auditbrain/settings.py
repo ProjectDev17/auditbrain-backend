@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Third party
+    "corsheaders",
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -203,7 +205,7 @@ FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
 # Ollama AI Configuration
 OLLAMA_CONFIG = {
     'BASE_URL': os.environ.get('OLLAMA_URL', 'http://localhost:11434'),
-    'MODEL': os.environ.get('OLLAMA_MODEL', 'llama3:latest'),
+    'MODEL': os.environ.get('OLLAMA_MODEL', 'qwen2.5:7b'),
     'TEMPERATURE': 0.7,
     'MAX_TOKENS': 2000,
     'ENABLE_CONTEXT': True,
@@ -217,3 +219,16 @@ Tienes acceso a las auditorías del usuario y puedes ayudar con:
 Responde de forma concisa y profesional. Si necesitas información específica,
 usa las herramientas disponibles para consultar la base de datos.'''
 }
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    os.environ.get('FRONTEND_URL', 'http://localhost:3000'),
+    'http://localhost:5173',  # Vite default
+    'http://127.0.0.1:5173',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Also allow all if in debug, but keep origins for safety
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True

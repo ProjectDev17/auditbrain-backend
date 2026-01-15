@@ -172,7 +172,7 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], url_path='chat-stream')
     def chat_stream(self, request, pk=None):
         """
         Enviar mensaje y obtener respuesta de Ollama en streaming (SSE).
@@ -217,7 +217,7 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 for chunk in ollama_service.chat(messages=messages, tools=tools, stream=True):
                     full_response += chunk
                     # Enviar chunk como SSE
-                    yield f"data: {json.dumps({'content': chunk})}\n\n"
+                    yield f"data: {json.dumps({'content': chunk}, ensure_ascii=False)}\n\n"
                 
                 # Guardar respuesta completa
                 AIMessage.objects.create(
@@ -230,11 +230,11 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 conversation.save()
                 
                 # Enviar evento de finalización
-                yield f"data: {json.dumps({'done': True})}\n\n"
+                yield f"data: {json.dumps({'done': True}, ensure_ascii=False)}\n\n"
                 
             except Exception as e:
                 logger.exception(f"Streaming failed: {e}")
-                yield f"data: {json.dumps({'error': str(e)})}\n\n"
+                yield f"data: {json.dumps({'error': str(e)}, ensure_ascii=False)}\n\n"
         
         # Retornar respuesta streaming
         response = StreamingHttpResponse(

@@ -22,12 +22,19 @@ def get_audit_context_tools() -> List[Dict[str, Any]]:
     ollama_tools = []
     
     for tool in mcp_tools:
+        # Asegurar que el esquema sea válido para Ollama
+        parameters = tool.get("inputSchema", {})
+        if not parameters:
+            parameters = {"type": "object", "properties": {}}
+        elif "type" not in parameters:
+            parameters["type"] = "object"
+            
         ollama_tool = {
             "type": "function",
             "function": {
                 "name": tool["name"],
                 "description": tool["description"],
-                "parameters": tool.get("inputSchema", {})
+                "parameters": parameters
             }
         }
         ollama_tools.append(ollama_tool)

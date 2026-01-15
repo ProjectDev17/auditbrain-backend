@@ -13,11 +13,17 @@ class AuditTypeSerializer(serializers.ModelSerializer):
 
 
 class AuditSerializer(serializers.ModelSerializer):
+    # Display fields for frontend (read-only)
+    auditor_name = serializers.SerializerMethodField()
+    audit_type_name = serializers.CharField(source='audit_type.name', read_only=True)
+    
     class Meta:
         model = Audit
         fields = [
             'id', 'title', 'description', 'status',
-            'audit_type', 'auditor', 'start_date', 'end_date',
+            'audit_type', 'audit_type_name',
+            'auditor', 'auditor_name',
+            'start_date', 'end_date',
             'created_at', 'updated_at', 
             'created_by', 'updated_by', 
             'deleted'
@@ -25,8 +31,16 @@ class AuditSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'id', 'created_at', 'updated_at', 
             'created_by', 'updated_by', 
-            'deleted', 'deleted_by'
+            'deleted', 'deleted_by',
+            'auditor_name', 'audit_type_name'
         ]
+    
+    def get_auditor_name(self, obj):
+        """Return auditor's full name or username if available."""
+        if obj.auditor:
+            full_name = obj.auditor.get_full_name()
+            return full_name if full_name else obj.auditor.username
+        return None
     
     def validate_title(self, value):
         """Validar título: longitud, contenido HTML y caracteres válidos."""

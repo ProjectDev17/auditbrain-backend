@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "audits",
     "reports",
     "mcp",
+    "ai_chat",
 ]
 
 MIDDLEWARE = [
@@ -198,3 +199,21 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Email configuration (development)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+
+# Ollama AI Configuration
+OLLAMA_CONFIG = {
+    'BASE_URL': os.environ.get('OLLAMA_URL', 'http://localhost:11434'),
+    'MODEL': os.environ.get('OLLAMA_MODEL', 'llama3.2:3b'),
+    'TEMPERATURE': 0.7,
+    'MAX_TOKENS': 2000,
+    'ENABLE_CONTEXT': True,
+    'SYSTEM_PROMPT': '''Eres un asistente especializado en auditorías para AuditBrain.
+Tienes acceso a las auditorías del usuario y puedes ayudar con:
+- Consultas sobre el estado de auditorías
+- Creación de nuevas auditorías
+- Análisis de eventos y evidencias
+- Generación de reportes
+
+Responde de forma concisa y profesional. Si necesitas información específica,
+usa las herramientas disponibles para consultar la base de datos.'''
+}

@@ -16,6 +16,7 @@ class AuditSerializer(serializers.ModelSerializer):
     # Display fields for frontend (read-only)
     auditor_name = serializers.SerializerMethodField()
     audit_type_name = serializers.CharField(source='audit_type.name', read_only=True)
+    similar_audits = serializers.SerializerMethodField()
     
     class Meta:
         model = Audit
@@ -26,13 +27,15 @@ class AuditSerializer(serializers.ModelSerializer):
             'start_date', 'end_date',
             'created_at', 'updated_at', 
             'created_by', 'updated_by', 
-            'deleted'
+            'deleted',
+            'similar_audits'
         ]
         read_only_fields = [
             'id', 'created_at', 'updated_at', 
             'created_by', 'updated_by', 
             'deleted', 'deleted_by',
-            'auditor_name', 'audit_type_name'
+            'auditor_name', 'audit_type_name',
+            'similar_audits'
         ]
     
     def get_auditor_name(self, obj):
@@ -41,6 +44,18 @@ class AuditSerializer(serializers.ModelSerializer):
             full_name = obj.auditor.get_full_name()
             return full_name if full_name else obj.auditor.username
         return None
+
+    def get_similar_audits(self, obj):
+        """
+        Retorna otras auditorías con el mismo título.
+        Solo se ejecuta en operaciones de escritura (POST, PUT, PATCH) para evitar demoras en GET.
+        """
+        request = self.context.get('request')
+        if request and request.method == 'GET':
+            return []
+            
+        qs = Audit.objects.filter(title__iexact=obj.title, deleted=False).exclude(id=obj.id)
+        return qs.values('id', 'title', 'status', 'created_at')
     
     def validate_title(self, value):
         """Validar título: longitud, contenido HTML y caracteres válidos."""
@@ -109,8 +124,11 @@ class AuditSerializer(serializers.ModelSerializer):
                 qs = qs.exclude(id=self.instance.id)
             
             if qs.exists():
+                # Obtener detalles de la auditoría existente para mostrarlos en el error
+                similar_data = qs.values('id', 'title', 'status', 'created_at')
                 raise serializers.ValidationError({
-                    'non_field_errors': "Ya existe una auditoría activa con ese título y tipo."
+                    'non_field_errors': ["Ya existe una auditoría activa con ese título y tipo."],
+                    'similar_audits': similar_data
                 })
 
         # 5. Validar transiciones de estado
@@ -165,6 +183,10 @@ class AuditEventSerializer(serializers.ModelSerializer):
         title = data.get('title')
         occurred_at = data.get('occurred_at')
         
+        if self.instance:
+            title = title or self.instance.title
+            occurred_at = occurred_at or self.instance.occurred_at
+
         if title and occurred_at and audit_id:
             qs = self.Meta.model.objects.filter(
                 audit_id=audit_id,

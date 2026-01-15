@@ -203,7 +203,7 @@ FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
 # Ollama AI Configuration
 OLLAMA_CONFIG = {
     'BASE_URL': os.environ.get('OLLAMA_URL', 'http://localhost:11434'),
-    'MODEL': os.environ.get('OLLAMA_MODEL', 'llama3.2:3b'),
+    'MODEL': os.environ.get('OLLAMA_MODEL', 'llama3:latest'),
     'TEMPERATURE': 0.7,
     'MAX_TOKENS': 2000,
     'ENABLE_CONTEXT': True,

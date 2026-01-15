@@ -58,17 +58,46 @@ class AuditEvent(AuditableModel):
     Modelo para eventos de calendario asociados a auditorías.
     Permite programar revisiones y fechas clave.
     """
+    class EventType(models.TextChoices):
+        FINDING = 'finding', _('Finding')
+        RECOMMENDATION = 'recommendation', _('Recommendation')
+        OBSERVATION = 'observation', _('Observation')
+        MEETING = 'meeting', _('Meeting')
+        MILESTONE = 'milestone', _('Milestone')
+        OTHER = 'other', _('Other')
+    
+    class Severity(models.TextChoices):
+        LOW = 'low', _('Low')
+        MEDIUM = 'medium', _('Medium')
+        HIGH = 'high', _('High')
+        CRITICAL = 'critical', _('Critical')
+    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     audit = models.ForeignKey(Audit, on_delete=models.CASCADE, related_name='events')
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    event_date = models.DateTimeField()
+    event_type = models.CharField(
+        max_length=20,
+        choices=EventType.choices,
+        default=EventType.OTHER,
+        db_index=True
+    )
+    severity = models.CharField(
+        max_length=20,
+        choices=Severity.choices,
+        default=Severity.MEDIUM,
+        blank=True,
+        null=True
+    )
+    occurred_at = models.DateTimeField()
     
     class Meta:
-        ordering = ['event_date']
+        ordering = ['occurred_at']
     
     def __str__(self) -> str:
-        return f"{self.title} - {self.event_date.strftime('%Y-%m-%d')}"
+        return f"{self.title} - {self.occurred_at.strftime('%Y-%m-%d')}"
+
+
 
 
 class Evidence(AuditableModel):

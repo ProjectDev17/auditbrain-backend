@@ -60,7 +60,9 @@ def log_event_save(sender, instance, created, **kwargs):
             'event_id': str(instance.id),
             'audit_id': str(instance.audit_id),
             'title': instance.title,
-            'event_date': instance.event_date.isoformat()
+            'event_type': instance.event_type,
+            'severity': instance.severity,
+            'occurred_at': instance.occurred_at.isoformat()
         },
         user=user,
         resource_id=instance.audit_id

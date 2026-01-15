@@ -130,7 +130,8 @@ class AuditEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuditEvent
         fields = [
-            'id', 'title', 'description', 'event_date',
+            'id', 'title', 'description', 
+            'event_type', 'severity', 'occurred_at',
             'created_at', 'created_by', 'updated_at', 'updated_by'
         ]
         read_only_fields = [
@@ -155,13 +156,13 @@ class AuditEventSerializer(serializers.ModelSerializer):
         
         # Validar unicidad (mismo título, misma fecha, misma auditoría)
         title = data.get('title')
-        event_date = data.get('event_date')
+        occurred_at = data.get('occurred_at')
         
-        if title and event_date and audit_id:
+        if title and occurred_at and audit_id:
             qs = self.Meta.model.objects.filter(
                 audit_id=audit_id,
                 title__iexact=title,
-                event_date=event_date,
+                occurred_at=occurred_at,
                 deleted=False
             )
             if self.instance:

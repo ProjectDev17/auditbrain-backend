@@ -221,10 +221,11 @@ def get_events_by_audit(filters=None):
     now = timezone.now()
     
     queryset = AuditEvent.objects.filter(deleted=False)
-    queryset = apply_report_filters(queryset, filters, date_field='event_date')
+    queryset = apply_report_filters(queryset, filters, date_field='occurred_at')
     
     total_events = queryset.count()
-    upcoming_events = queryset.filter(event_date__gte=now).count()
+    upcoming_events = queryset.filter(occurred_at__gte=now).count()
+
     
     # Eventos por auditoría
     by_audit = (
@@ -308,17 +309,18 @@ def get_event_summary_report(filters=None):
     # Si no hay filtros de fecha, mostrar últimos 30 días por defecto
     if not filters or (not filters.get('start_date') and not filters.get('end_date')):
         default_start = timezone.now() - dt.timedelta(days=30)
-        queryset = queryset.filter(event_date__gte=default_start)
+        queryset = queryset.filter(occurred_at__gte=default_start)
     
     # Aplicar filtros adicionales de la request
-    queryset = apply_report_filters(queryset, filters, date_field='event_date')
+    queryset = apply_report_filters(queryset, filters, date_field='occurred_at')
     
     total_events = queryset.count()
     
     # Agrupar por fecha usando el queryset ya filtrado
     events_by_date = (
         queryset
-        .annotate(date=TruncDate('event_date'))
+        .annotate(date=TruncDate('occurred_at'))
+
         .values('date')
         .annotate(count=Count('id'))
         .order_by('date')

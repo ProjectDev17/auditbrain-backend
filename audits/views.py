@@ -51,6 +51,8 @@ class AuditEventViewSet(viewsets.ModelViewSet):
     """
     serializer_class = serializers.AuditEventSerializer
     ordering_fields = '__all__'
+    ordering = ['-created_at']
+
     
     def get_queryset(self):
         audit_id = self.kwargs.get('audit_pk')
@@ -78,6 +80,8 @@ class GlobalAuditEventViewSet(viewsets.ModelViewSet):
     queryset = AuditEvent.objects.filter(deleted=False)
     serializer_class = serializers.AuditEventSerializer
     ordering_fields = '__all__'
+    ordering = ['-created_at']
+
     
     def perform_destroy(self, instance):
         # Soft delete
@@ -93,6 +97,8 @@ class EvidenceViewSet(viewsets.ModelViewSet):
     """
     serializer_class = serializers.EvidenceSerializer
     ordering_fields = '__all__'
+    ordering = ['-created_at']
+
     
     def get_queryset(self):
         audit_id = self.kwargs.get('audit_pk')
@@ -120,6 +126,8 @@ class GlobalEvidenceViewSet(viewsets.ModelViewSet):
     queryset = Evidence.objects.filter(deleted=False)
     serializer_class = serializers.EvidenceSerializer
     ordering_fields = '__all__'
+    ordering = ['-created_at']
+
     
     def perform_destroy(self, instance):
         # Soft delete

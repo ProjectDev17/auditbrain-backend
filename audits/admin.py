@@ -25,8 +25,8 @@ class AuditAdmin(admin.ModelAdmin):
 
 @admin.register(AuditEvent)
 class AuditEventAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'audit', 'event_date', 'created_by')
-    list_filter = ('event_date', 'created_at')
+    list_display = ('id', 'title', 'audit', 'event_type', 'severity', 'occurred_at', 'created_by')
+    list_filter = ('event_type', 'severity', 'occurred_at', 'created_at')
     search_fields = ('title', 'description', 'audit__title')
     readonly_fields = ('id', 'created_at', 'created_by', 'updated_at', 'updated_by')
 

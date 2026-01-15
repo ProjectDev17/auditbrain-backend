@@ -133,12 +133,18 @@ class OllamaService:
             # Asegurar que el rol sea uno de los soportados por Ollama 
             # (user, assistant, system, tool).
             role = msg.role
-            # Validar que si es tool, Ollama reciba los campos necesarios 
-            # (aunque aquí solo enviamos content).
-            messages.append({
+            
+            message_dict = {
                 "role": role,
                 "content": msg.content
-            })
+            }
+            
+            # CRITICAL: Si el mensaje del asistente tiene tool_calls, 
+            # DEBEN incluirse para mantener el contexto.
+            if role == 'assistant' and msg.tool_calls:
+                message_dict["tool_calls"] = msg.tool_calls
+            
+            messages.append(message_dict)
         
         return messages
 

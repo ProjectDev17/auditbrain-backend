@@ -11,12 +11,21 @@ from authentication.models import CustomUser
 from core.services import audit_logger
 
 
-def apply_report_filters(queryset, filters, date_field='created_at'):
+def apply_report_filters(queryset, filters, date_field=None):
     """
     Aplica filtros comunes de reportería a un queryset.
     """
     if not filters:
         return queryset
+        
+    # Determinar campo de fecha por defecto según el modelo
+    if not date_field:
+        if queryset.model.__name__ == 'Audit':
+            date_field = 'start_date'  # Usar start_date para auditorías
+        elif queryset.model.__name__ == 'AuditEvent':
+            date_field = 'occurred_at'
+        else:
+            date_field = 'created_at'
     
     # Filtros de fecha
     start_date = filters.get('start_date')

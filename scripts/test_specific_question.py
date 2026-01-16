@@ -51,7 +51,7 @@ def test_question():
     print_success(f"Conversation created: {conversation_id}")
 
     # 3. Ask Question
-    question = "Cuantas auditorias hay completadas el año pasado?"
+    question = "¿Cuál es el porcentaje de auditorías completadas respecto al total?"
     print_info(f"Asking: '{question}'")
     
     chat_resp = requests.post(

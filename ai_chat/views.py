@@ -260,10 +260,10 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                     if tool_calls:
                         all_tool_calls.extend(tool_calls)
                     
-                    # Si recibimos contenido, lo guardamos pero NO lo enviamos aún si hay posibilidad de tools
-                    # O si ya detectamos tools, ignoramos el texto "pensamiento" que suele venir antes
                     if content:
                         first_pass_content += content
+                        # DEBUG: Print content to console to see what the model is saying
+                        print(f"DEBUG CHUNK: {content!r}", flush=True)
 
                 # Si NO hubo tools, entonces enviamos el contenido acumulado (era una respuesta directa)
                 if not all_tool_calls:

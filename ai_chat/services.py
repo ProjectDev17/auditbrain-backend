@@ -107,7 +107,8 @@ class OllamaService:
     def format_messages_for_ollama(
         self,
         conversation_messages: List,
-        include_system: bool = True
+        include_system: bool = True,
+        user = None
     ) -> List[Dict[str, str]]:
         """
         Formatea mensajes de la BD al formato de Ollama.
@@ -125,7 +126,12 @@ class OllamaService:
         if include_system and self.config.get('SYSTEM_PROMPT'):
             from datetime import datetime
             current_date = datetime.now().strftime('%Y-%m-%d')
-            system_prompt = f"{self.config['SYSTEM_PROMPT']}\n\nFecha actual del sistema: {current_date}"
+            
+            user_info = ""
+            if user:
+                user_info = f"\n\nUSUARIO ACTUAL:\n- Nombre: {user.first_name} {user.last_name}\n- Email: {user.email}\n- ID: {user.id}"
+            
+            system_prompt = f"{self.config['SYSTEM_PROMPT']}\n\nFecha actual del sistema: {current_date}{user_info}"
             
             messages.append({
                 "role": "system",

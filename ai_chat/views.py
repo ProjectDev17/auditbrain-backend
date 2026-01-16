@@ -112,7 +112,8 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 
                 # Preparar mensajes para Ollama
                 messages = ollama_service.format_messages_for_ollama(
-                    conversation.messages.all()
+                    conversation.messages.all(),
+                    user=request.user
                 )
                 
                 # Obtener tools si está habilitado
@@ -241,7 +242,8 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 
                 # 2. Primer paso: Llamar a Ollama (puede o no usar tools)
                 messages = ollama_service.format_messages_for_ollama(
-                    conversation.messages.all()
+                    conversation.messages.all(),
+                    user=request.user
                 )
                 
                 tools = None

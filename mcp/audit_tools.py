@@ -37,6 +37,10 @@ logger = logging.getLogger(__name__)
                 "type": "string",
                 "description": "Search term for title or description"
             },
+            "auditor_id": {
+                "type": "string",
+                "description": "Filter by auditor's User ID (UUID)"
+            },
             "limit": {
                 "type": "integer",
                 "default": 10,
@@ -86,6 +90,10 @@ def list_audits(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, An
             Q(title__icontains=search) | 
             Q(description__icontains=search)
         )
+        
+    # Apply auditor filter
+    if auditor_id := params.get("auditor_id"):
+        qs = qs.filter(auditor_id=auditor_id)
     
     # Get total count before pagination
     total = qs.count()
@@ -119,6 +127,10 @@ def list_audits(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, An
                 "type": "string",
                 "format": "date",
                 "description": "Filter stats for audits starting on or before this date"
+            },
+            "auditor_id": {
+                "type": "string",
+                "description": "Filter stats by auditor's User ID (UUID)"
             }
         }
     },
@@ -143,6 +155,9 @@ def get_audit_statistics(params: Dict[str, Any], context: Dict[str, Any]) -> Dic
         
     if end_date := params.get("end_date"):
         qs = qs.filter(start_date__lte=end_date)
+        
+    if auditor_id := params.get("auditor_id"):
+        qs = qs.filter(auditor_id=auditor_id)
         
     total = qs.count()
     

@@ -129,9 +129,16 @@ class OllamaService:
             
             user_info = ""
             if user:
+                # DEBUG: Confirm user is present
+                logger.info(f"Injecting context for user: {user.email} (ID: {user.id})")
                 user_info = f"\n\nUSUARIO ACTUAL:\n- Nombre: {user.first_name} {user.last_name}\n- Email: {user.email}\n- ID: {user.id}"
+            else:
+                logger.warning("No user provided for context injection")
             
             system_prompt = f"{self.config['SYSTEM_PROMPT']}\n\nFecha actual del sistema: {current_date}{user_info}"
+            
+            # CRITICAL DEBUG: Print what we are sending to Ollama
+            print(f"DEBUG SYSTEM PROMPT:\n{system_prompt}", flush=True)
             
             messages.append({
                 "role": "system",

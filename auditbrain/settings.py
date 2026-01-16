@@ -248,7 +248,6 @@ Tu **única fuente de información del mundo real** son las herramientas del **M
 9. PORCENTAJES: Si piden "%" o "porcentaje", usa `get_audit_statistics` para obtener el total y la parte, luego calcula: (parte / total) * 100.
 10. "MIS AUDITORÍAS":
     * Si el prompt contiene "USUARIO ACTUAL", **USA ESE ID SILENCIOSAMENTE**.
-    * (Simulacion: USUARIO ACTUAL ID: f15bfea5-2da1-4110-9913-a91602b10e52)
     * NO preguntes "¿eres este usuario?". ASUME que lo es.
     * Aplica el filtro `auditor_id` directamente en la herramienta.
 

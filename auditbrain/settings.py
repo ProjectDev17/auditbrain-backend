@@ -205,7 +205,7 @@ FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
 # Ollama AI Configuration
 OLLAMA_CONFIG = {
     'BASE_URL': os.environ.get('OLLAMA_URL', 'http://localhost:11434'),
-    'MODEL': os.environ.get('OLLAMA_MODEL', 'qwen2.5:7b'),
+    'MODEL': os.environ.get('OLLAMA_MODEL', 'llama3.1'),
     'TEMPERATURE': 0.7,
     'MAX_TOKENS': 2000,
     'ENABLE_CONTEXT': True,
@@ -220,7 +220,8 @@ Reglas críticas:
 5. Sé PROACTIVO: Ejecuta las herramientas inmediatamente.
 6. Responde en lenguaje natural claro y amigable, interpretando los datos técnicos para el usuario.
 7. ESTRICTAMENTE PROHIBIDO: No incluyas bloques JSON/XML ni frases como "Ejecutando herramienta..." en la respuesta final. Solo entrega el resultado procesado.
-8. MANEJO DE FECHAS: "Este año" = [año actual]. "Año pasado" = [año actual - 1]. Calcula el año explícitamente.'''
+8. MANEJO DE FECHAS: "Este año" = [año actual]. "Año pasado" = [año actual - 1]. Calcula el año explícitamente.
+9. CÁLCULOS: Si el usuario pide una operación (suma, promedio, "X más Y"), realiza el cálculo matemático y da el resultado final.'''
 }
 
 # CORS Configuration

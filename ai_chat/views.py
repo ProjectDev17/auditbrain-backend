@@ -252,18 +252,26 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                 all_tool_calls = []
                 
                 # Procesar primer stream
+                first_pass_content = ""
                 for chunk_dict in ollama_service.chat(messages=messages, tools=tools, stream=True):
                     content = chunk_dict.get('content')
                     tool_calls = chunk_dict.get('tool_calls')
                     
-                    if content:
-                        full_response += content
-                        # Enviar texto al usuario solo si no hay intención de tools detectada aún
-                        # (O si el modelo decide enviar texto Y tools, aunque Ollama suele separar).
-                        yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
-                    
                     if tool_calls:
                         all_tool_calls.extend(tool_calls)
+                    
+                    # Si recibimos contenido, lo guardamos pero NO lo enviamos aún si hay posibilidad de tools
+                    # O si ya detectamos tools, ignoramos el texto "pensamiento" que suele venir antes
+                    if content:
+                        first_pass_content += content
+
+                # Si NO hubo tools, entonces enviamos el contenido acumulado (era una respuesta directa)
+                if not all_tool_calls:
+                     # Re-simular stream para el usuario ya que lo bufferizamos
+                     # (O simplemente enviarlo como un bloque grande, pero el cliente espera SSE)
+                     # Para mantener el efecto "typewriter", podríamos fragmentarlo, pero por simplicidad:
+                     if first_pass_content:
+                        yield f"data: {json.dumps({'content': first_pass_content}, ensure_ascii=False)}\n\n"
                 
                 # 3. Si hubo tool calls, ejecutarlas y hacer un segundo paso
                 if all_tool_calls:
@@ -271,7 +279,7 @@ class AIConversationViewSet(viewsets.ModelViewSet):
                     AIMessage.objects.create(
                         conversation=conversation,
                         role='assistant',
-                        content=full_response,
+                        content=first_pass_content, # Usar el contenido que bufferizamos
                         tool_calls=all_tool_calls
                     )
                     

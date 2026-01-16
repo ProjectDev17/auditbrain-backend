@@ -218,7 +218,9 @@ Reglas críticas:
 3. Para preguntas de conteo o estadísticas (ej: "¿Cuántas auditorías...?"), usa SIEMPRE `get_audit_statistics` si es posible, es más eficiente, usa `list_audits` solo si necesitas detalles.
 4. NO inventes datos. Si la herramienta retorna vacío, di "No encontré resultados".
 5. Sé PROACTIVO: Ejecuta las herramientas inmediatamente.
-6. Responde en lenguaje natural claro y amigable, interpretando los datos técnicos para el usuario.'''
+6. Responde en lenguaje natural claro y amigable, interpretando los datos técnicos para el usuario.
+7. ESTRICTAMENTE PROHIBIDO: No incluyas bloques JSON/XML ni frases como "Ejecutando herramienta..." en la respuesta final. Solo entrega el resultado procesado.
+8. MANEJO DE FECHAS: "Este año" = [año actual]. "Año pasado" = [año actual - 1]. Calcula el año explícitamente.'''
 }
 
 # CORS Configuration

@@ -123,9 +123,13 @@ class OllamaService:
         
         # Agregar system prompt si está habilitado
         if include_system and self.config.get('SYSTEM_PROMPT'):
+            from datetime import datetime
+            current_date = datetime.now().strftime('%Y-%m-%d')
+            system_prompt = f"{self.config['SYSTEM_PROMPT']}\n\nFecha actual del sistema: {current_date}"
+            
             messages.append({
                 "role": "system",
-                "content": self.config['SYSTEM_PROMPT']
+                "content": system_prompt
             })
         
         # Agregar mensajes de la conversación

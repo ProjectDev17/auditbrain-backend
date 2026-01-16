@@ -196,6 +196,9 @@ class AIConversationViewSet(viewsets.ModelViewSet):
             conversation.save()
         
             # Retornar conversación actualizada
+            if hasattr(conversation, '_prefetched_objects_cache'):
+                conversation._prefetched_objects_cache = {}
+
             serializer = self.get_serializer(conversation)
             return Response(serializer.data)
             

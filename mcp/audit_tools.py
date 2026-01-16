@@ -23,6 +23,20 @@ logger = logging.getLogger(__name__)
                 "enum": ["pending", "in_progress", "completed", "planned"],
                 "description": "Filter by audit status"
             },
+            "start_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Filter audits starting on or after this date (YYYY-MM-DD)"
+            },
+            "end_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Filter audits starting on or before this date (YYYY-MM-DD)"
+            },
+            "search": {
+                "type": "string",
+                "description": "Search term for title or description"
+            },
             "limit": {
                 "type": "integer",
                 "default": 10,
@@ -51,12 +65,27 @@ def list_audits(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, An
     """List audits with optional filtering."""
     from audits.models import Audit
     from audits.serializers import AuditSerializer
+    from django.db.models import Q
     
     qs = Audit.objects.filter(deleted=False)
     
     # Apply status filter
     if status := params.get("status"):
         qs = qs.filter(status=status)
+        
+    # Apply date filters (filtering by start_date)
+    if start_date := params.get("start_date"):
+        qs = qs.filter(start_date__gte=start_date)
+        
+    if end_date := params.get("end_date"):
+        qs = qs.filter(start_date__lte=end_date)
+        
+    # Apply search filter
+    if search := params.get("search"):
+        qs = qs.filter(
+            Q(title__icontains=search) | 
+            Q(description__icontains=search)
+        )
     
     # Get total count before pagination
     total = qs.count()
@@ -72,6 +101,58 @@ def list_audits(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, An
     return {
         "audits": serializer.data,
         "total": total
+    }
+
+
+@ToolRegistry.register(
+    name="get_audit_statistics",
+    description="Get statistics about audits, including counts by status and total. Useful for dashboard summaries or answering 'how many' questions.",
+    input_schema={
+        "type": "object",
+        "properties": {
+            "start_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Filter stats for audits starting on or after this date"
+            },
+            "end_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Filter stats for audits starting on or before this date"
+            }
+        }
+    },
+    output_schema={
+        "type": "object",
+        "properties": {
+            "total": {"type": "integer"},
+            "by_status": {"type": "object"}
+        }
+    },
+    scope="AuditRead"
+)
+def get_audit_statistics(params: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+    """Get audit statistics."""
+    from audits.models import Audit
+    from django.db.models import Count
+    
+    qs = Audit.objects.filter(deleted=False)
+    
+    if start_date := params.get("start_date"):
+        qs = qs.filter(start_date__gte=start_date)
+        
+    if end_date := params.get("end_date"):
+        qs = qs.filter(start_date__lte=end_date)
+        
+    total = qs.count()
+    
+    # Count by status
+    status_counts = qs.values('status').annotate(count=Count('id')).order_by('status')
+    by_status = {item['status']: item['count'] for item in status_counts}
+    
+    return {
+        "total": total,
+        "by_status": by_status
     }
 
 
